@@ -118,7 +118,7 @@ namespace Mandelizer
                     }
 
                     // declare imaginary numbers here once
-                    double cIm, cRe, zRe, zIm, zReTmp;
+                    double cIm, cRe, zRe, zIm, zReSq, zImSq, zReTmp;
                     int iterations;
 
                     // imaginary axes step
@@ -132,15 +132,21 @@ namespace Mandelizer
                         zRe = 0;
                         zIm = 0;
                         iterations = 0;
+                        zReSq = zRe * zRe;
+                        zImSq = zIm * zIm;
 
                         // iterate until the max number of maxIterations was not reached
                         // or the value's magnitude  falls below 2
-                        while (iterations < maxIt && zRe * zRe + zIm * zIm < 4)
+                        while (iterations < maxIt && zReSq + zImSq < 4)
                         {
                             // z = z^2 + c
                             zReTmp = zRe;
-                            zRe = zRe * zRe - zIm * zIm + cRe;
-                            zIm = 2 * zReTmp * zIm + cIm;
+                            zRe = zReSq - zImSq + cRe;
+                            zIm = zReTmp * zIm;
+                            zIm = zIm + zIm + cIm;
+
+                            zReSq = zRe * zRe;
+                            zImSq = zIm * zIm;
 
                             iterations++;
                         }
