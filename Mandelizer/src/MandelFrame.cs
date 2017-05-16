@@ -103,6 +103,8 @@ namespace Mandelizer
             AbortRenderingFlag = true;
             lock (Constants.RenderLock)
             {
+                long ptr = _mainWindow.FastImageRef.Lock();
+
                 AbortRenderingFlag = false;
 
                 Parallel.For(0, _mainWindow.RenderSizeRef.Height, (y, state) =>
@@ -147,17 +149,20 @@ namespace Mandelizer
                         _iterationStore[x, y] = iterations;
 
                         // map used maxIterations to color
-                        if (draw) SetPixel(x, y, iterations);
+                        if (draw) SetPixel(ptr, x, y, iterations);
 
                         // real axes step
                         cRe += stepX;
                     }
 
                     // refresh image every x vertical lines
-                    if (y % 30 == 0) _mainWindow.FastImageRef.Invalidate();
+                    if (y % 50 == 0)
+                    {
+                        ptr = _mainWindow.FastImageRef.UnlockLock();
+                    }
                 });
 
-                _mainWindow.FastImageRef.Invalidate();
+                _mainWindow.FastImageRef.Unlock();
 
                 Trace.WriteLine($"calculated mandelbrot in {(DateTime.Now - startTime).TotalMilliseconds} seconds.");
             }
@@ -174,6 +179,8 @@ namespace Mandelizer
                 _iterationStore.GetLength(0) == _mainWindow.RenderSizeRef.Width &&
                 _iterationStore.GetLength(1) == _mainWindow.RenderSizeRef.Height)
             {
+                long ptr = _mainWindow.FastImageRef.Lock();
+
                 // abort ongoing rendering and try to catch the lock
                 AbortRenderingFlag = true;
                 lock (Constants.RenderLock)
@@ -191,14 +198,14 @@ namespace Mandelizer
 
                         for (var x = 0; x < _mainWindow.RenderSizeRef.Width; x++)
                         {
-                            SetPixel(x, y, _iterationStore[x, y]);
+                            SetPixel(ptr, x, y, _iterationStore[x, y]);
                         }
 
                         // refresh image every 100 vertical lines
-                        if (y % 100 == 0) _mainWindow.FastImageRef.Invalidate();
+                        // if (y % 100 == 0) _mainWindow.FastImageRef.Invalidate();
                     });
 
-                    _mainWindow.FastImageRef.Invalidate();
+                    _mainWindow.FastImageRef.Unlock();
                 }
             }
             else
@@ -217,7 +224,7 @@ namespace Mandelizer
         /// <param name="y">vertical position</param>
         /// <param name="iterationsValue">the needed maxIterations for this pixel</param>
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void SetPixel(int x, int y, int iterationsValue)
+        private void SetPixel(long ptr, int x, int y, int iterationsValue)
         {
             int mappedIt;
 
@@ -234,7 +241,7 @@ namespace Mandelizer
             // set pixel
             if (!_mainWindow.FastImageRef.Disposed)
             {
-                _mainWindow.FastImageRef.SetPixel(x, y, _mainWindow.ColorMapRef[mappedIt].ToArgb());
+                _mainWindow.FastImageRef.SetPixel(ptr, x, y, _mainWindow.ColorMapRef[mappedIt].ToArgb());
             }
         }
     }
