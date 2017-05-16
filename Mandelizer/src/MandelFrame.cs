@@ -31,7 +31,7 @@ namespace Mandelizer
         /// </summary>
         public int MaxIterations
         {
-            get { return _maxIterations; }
+            get => _maxIterations;
             set
             {
                 _maxIterations = value;
@@ -65,13 +65,13 @@ namespace Mandelizer
 
         public void RenderAsync(bool draw = true)
         {
-            Thread t = new Thread(Render);
+            var t = new Thread(Render);
             t.Start(draw);
         }
 
         public void DrawAsync()
         {
-            Thread t = new Thread(Draw);
+            var t = new Thread(Draw);
             t.Start();
         }
 
@@ -85,7 +85,7 @@ namespace Mandelizer
         {
             // cast value
             if (!(obj is bool)) throw new ArgumentException();
-            bool draw = (bool)obj;
+            var draw = (bool)obj;
 
             // time measurement
             DateTime startTime = DateTime.Now;
@@ -124,7 +124,7 @@ namespace Mandelizer
 
                     // real axes
                     cRe = Position.XMin;
-                    for (int x = 0; x < _mainWindow.RenderSizeRef.Width; x++)
+                    for (var x = 0; x < _mainWindow.RenderSizeRef.Width; x++)
                     {
                         // reset maxIterations and z
                         zRe = 0;
@@ -189,7 +189,7 @@ namespace Mandelizer
                             return;
                         }
 
-                        for (int x = 0; x < _mainWindow.RenderSizeRef.Width; x++)
+                        for (var x = 0; x < _mainWindow.RenderSizeRef.Width; x++)
                         {
                             SetPixel(x, y, _iterationStore[x, y]);
                         }

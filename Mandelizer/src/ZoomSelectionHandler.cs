@@ -42,7 +42,7 @@ namespace Mandelizer
         /// <summary>
         /// the displayed zooming rectangle
         /// </summary>
-        public Rectangle ZoomingRectangle { get; private set; }
+        public Rectangle ZoomingRectangle { get; }
 
         /// <summary>
         /// will be calcuted if the zooming has been selected
@@ -101,8 +101,8 @@ namespace Mandelizer
                 _rectEnd.Y = e.GetPosition(ReferenceCanvas).Y;
                 
                 // grab width and height
-                int newWidth = (int)(_rectEnd.X - _rectStart.X);
-                int newHeight = (int)(_rectEnd.Y - _rectStart.Y);
+                var newWidth = (int)(_rectEnd.X - _rectStart.X);
+                var newHeight = (int)(_rectEnd.Y - _rectStart.Y);
                 
                 // fix ratio
                 if (Math.Abs(newWidth) > Math.Abs(newHeight)) newWidth = (int)(newHeight * Constants.GausRatioYX);
@@ -123,10 +123,10 @@ namespace Mandelizer
             if (_isZooming)
             {
                 // remember positions
-                int startX = (int)ZoomingRectangle.Margin.Left;
-                int startY = (int)ZoomingRectangle.Margin.Top;
-                int width = (int)ZoomingRectangle.Width;
-                int height = (int)ZoomingRectangle.Height;
+                var startX = (int)ZoomingRectangle.Margin.Left;
+                var startY = (int)ZoomingRectangle.Margin.Top;
+                var width = (int)ZoomingRectangle.Width;
+                var height = (int)ZoomingRectangle.Height;
 
                 // disable zooming and hide rectangle
                 AbortSelection();

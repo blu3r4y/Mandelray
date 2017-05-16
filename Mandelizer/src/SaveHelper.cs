@@ -13,31 +13,33 @@ namespace Mandelizer
         /// <returns>the selected path</returns>
         public static string SaveImage(System.Windows.Controls.Image image)
         {
-            Microsoft.Win32.SaveFileDialog SaveImageDialog = new Microsoft.Win32.SaveFileDialog();
-
-            SaveImageDialog.DefaultExt = ".bmp";
-            SaveImageDialog.Filter = "JPG Image (.jpg)|*.jpg|Bitmap Image (.bmp)|*.bmp";
-
-            if (SaveImageDialog.ShowDialog() == true)
+            var saveImageDialog = new Microsoft.Win32.SaveFileDialog
             {
-                if (SaveImageDialog.FilterIndex == 0)
+                DefaultExt = ".bmp",
+                Filter = "JPG Image (.jpg)|*.jpg|Bitmap Image (.bmp)|*.bmp"
+            };
+
+
+            if (saveImageDialog.ShowDialog() == true)
+            {
+                if (saveImageDialog.FilterIndex == 0)
                 {
                     var encoder = new JpegBitmapEncoder();
-                    SaveUsingEncoder(image, SaveImageDialog.FileName, encoder);
+                    SaveUsingEncoder(image, saveImageDialog.FileName, encoder);
                 }
                 else
                 {
                     var encoder = new BmpBitmapEncoder();
-                    SaveUsingEncoder(image, SaveImageDialog.FileName, encoder);
+                    SaveUsingEncoder(image, saveImageDialog.FileName, encoder);
                 }
             }
 
-            return SaveImageDialog.FileName;
+            return saveImageDialog.FileName;
         }
 
         private static void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
         {
-            RenderTargetBitmap bitmap = new RenderTargetBitmap(
+            var bitmap = new RenderTargetBitmap(
                 (int)visual.ActualWidth,
                 (int)visual.ActualHeight,
                 96,
@@ -48,7 +50,7 @@ namespace Mandelizer
             BitmapFrame frame = BitmapFrame.Create(bitmap);
             encoder.Frames.Add(frame);
 
-            using (var stream = File.Create(fileName))
+            using (FileStream stream = File.Create(fileName))
             {
                 encoder.Save(stream);
             }

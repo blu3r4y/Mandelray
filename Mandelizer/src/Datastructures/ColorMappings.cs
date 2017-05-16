@@ -40,7 +40,7 @@ namespace Mandelizer.Datastructures
         /// </summary>
         public static ColorMap SelectedItem
         {
-            get { return _selectedItem; }
+            get => _selectedItem;
             set
             {
                 _selectedItem = value;
@@ -52,7 +52,7 @@ namespace Mandelizer.Datastructures
         /// <summary>
         /// holds all the available color mappings
         /// </summary>
-        public static ObservableCollection<ColorMap> Items { get; private set; }
+        public static ObservableCollection<ColorMap> Items { get; }
 
         /// <summary>
         /// will be fired if the selcted item changed
@@ -75,7 +75,7 @@ namespace Mandelizer.Datastructures
             MonoGreen = new Color[256];
             MonoRed = new Color[256];
 
-            for (int i = 0; i < 256; i++)
+            for (var i = 0; i < 256; i++)
             {
                 GrayScale[i] = Color.FromArgb(255 - i, 255 - i, 255 - i);
                 MonoBlue[i] = Color.FromArgb(i, i, 255);
@@ -95,7 +95,7 @@ namespace Mandelizer.Datastructures
             MultiColor1[191] = Color.FromArgb(255, 0, 0);      // red
             MultiColor1[225] = Color.FromArgb(0, 0, 0);        // black
 
-            for (int i = 1; i <= 30; i++)
+            for (var i = 1; i <= 30; i++)
             {
                 MultiColor1[i] = Color.FromArgb(255, 255, 255 - (8 * i));
                 MultiColor1[i + 31] = Color.FromArgb(255 - (8 * i), 255, 0);
@@ -115,32 +115,33 @@ namespace Mandelizer.Datastructures
             MultiColor2 = new Color[768];
 
             // white - red
-            for (int i = 0; i < 256; i++)
+            for (var i = 0; i < 256; i++)
             {
                 MultiColor2[i] = Color.FromArgb(255, 255 - i, 255 - i);
             }
             // red - blue
-            for (int i = 0; i < 256; i++)
+            for (var i = 0; i < 256; i++)
             {
                 MultiColor2[256 + i] = ColorFromHsv(i, 1, 1);
             }
             // blue - black
-            for (int i = 0; i < 256; i++)
+            for (var i = 0; i < 256; i++)
             {
                 MultiColor2[512 + i] = Color.FromArgb(0, 0, 255 - i);
             }
 
             /* list which holds all the mappings */
 
-            Items = new ObservableCollection<ColorMap>();
-
-            Items.Add(new ColorMap("Grayscale", GrayScale));
-            Items.Add(new ColorMap("Mono Blue", MonoBlue));
-            Items.Add(new ColorMap("Mono Red", MonoRed));
-            Items.Add(new ColorMap("Mono Green", MonoGreen));
-            Items.Add(new ColorMap("Multi Color 1", MultiColor1));
-            Items.Add(new ColorMap("Multi Color 2", MultiColor2));
-
+            Items = new ObservableCollection<ColorMap>
+            {
+                new ColorMap("Grayscale", GrayScale),
+                new ColorMap("Mono Blue", MonoBlue),
+                new ColorMap("Mono Red", MonoRed),
+                new ColorMap("Mono Green", MonoGreen),
+                new ColorMap("Multi Color 1", MultiColor1),
+                new ColorMap("Multi Color 2", MultiColor2)
+            };
+            
             SelectedItem = Items[4];
         }
 
