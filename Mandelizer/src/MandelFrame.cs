@@ -91,11 +91,11 @@ namespace Mandelizer
             DateTime startTime = DateTime.Now;
 
             // reinit bufferd values
-            _iterationStore = new int[_mainWindow.RenderSizeRef.Width, _mainWindow.RenderSizeRef.Height];
+            _iterationStore = new int[_mainWindow.RenderSizeRef.RenderWidth, _mainWindow.RenderSizeRef.RenderHeight];
 
             // step width
-            double stepX = Position.XDiff/_mainWindow.RenderSizeRef.Width;
-            double stepY = Position.YDiff/_mainWindow.RenderSizeRef.Height;
+            double stepX = Position.XDiff/_mainWindow.RenderSizeRef.RenderWidth;
+            double stepY = Position.YDiff/_mainWindow.RenderSizeRef.RenderHeight;
 
             int maxIt = MaxIterations;
 
@@ -107,7 +107,7 @@ namespace Mandelizer
 
                 AbortRenderingFlag = false;
 
-                Parallel.For(0, _mainWindow.RenderSizeRef.Height, (y, state) =>
+                Parallel.For(0, _mainWindow.RenderSizeRef.RenderHeight, (y, state) =>
                 {
 
                     if (AbortRenderingFlag)
@@ -126,7 +126,7 @@ namespace Mandelizer
 
                     // real axes
                     cRe = Position.XMin;
-                    for (var x = 0; x < _mainWindow.RenderSizeRef.Width; x++)
+                    for (var x = 0; x < _mainWindow.RenderSizeRef.RenderWidth; x++)
                     {
                         // reset maxIterations and z
                         zRe = 0;
@@ -162,7 +162,7 @@ namespace Mandelizer
                     }
 
                     // refresh image every x vertical lines
-                    if (y % 50 == 0)
+                    if (y % 10 == 0)
                     {
                         ptr = _mainWindow.FastImageRef.UnlockLock();
                     }
@@ -182,8 +182,8 @@ namespace Mandelizer
         {
             // check if a bufferd value for the current dimensions exist
             if (_iterationStore != null &&
-                _iterationStore.GetLength(0) == _mainWindow.RenderSizeRef.Width &&
-                _iterationStore.GetLength(1) == _mainWindow.RenderSizeRef.Height)
+                _iterationStore.GetLength(0) == _mainWindow.RenderSizeRef.RenderWidth &&
+                _iterationStore.GetLength(1) == _mainWindow.RenderSizeRef.RenderHeight)
             {
                 long ptr = _mainWindow.FastImageRef.Lock();
 
@@ -193,7 +193,7 @@ namespace Mandelizer
                 {
                     AbortRenderingFlag = false;
                     
-                    Parallel.For(0, _mainWindow.RenderSizeRef.Height, (y, state) =>
+                    Parallel.For(0, _mainWindow.RenderSizeRef.RenderHeight, (y, state) =>
                     {
                         if (AbortRenderingFlag)
                         {
@@ -202,7 +202,7 @@ namespace Mandelizer
                             return;
                         }
 
-                        for (var x = 0; x < _mainWindow.RenderSizeRef.Width; x++)
+                        for (var x = 0; x < _mainWindow.RenderSizeRef.RenderWidth; x++)
                         {
                             SetPixel(ptr, x, y, _iterationStore[x, y]);
                         }

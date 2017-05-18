@@ -1,17 +1,33 @@
 ﻿namespace Mandelizer.Datastructures
 {
     /// <summary>
-    /// defines the width and height of the rendered mandelbrot set viewport
+    /// Defines the width and height of the rendered mandelbrot set viewport.
+    /// We distinguish between the actual render size and display size.
     /// </summary>
     public class RenderSize
     {
-        public int Width;
-        public int Height;
+        public const double SupersamplingFactor = 2.0;
 
-        public RenderSize(int width, int height)
+        public int RenderWidth { get; private set; }
+        public int RenderHeight { get; private set; }
+
+        public double DisplayWidth { get; private set; }
+        public double DisplayHeight { get; private set; }
+
+        public RenderSize(double displayWidth, double displayHeight)
         {
-            Width = width;
-            Height = height;
+            ChangeDisplaySize(displayWidth, displayHeight);
+        }
+
+        public RenderSize ChangeDisplaySize(double displayWidth, double displayHeight)
+        {
+            DisplayWidth = displayWidth;
+            DisplayHeight = displayHeight;
+
+            RenderWidth = (int)(displayWidth * SupersamplingFactor);
+            RenderHeight = (int)(displayHeight * SupersamplingFactor);
+
+            return this;
         }
     }
 }

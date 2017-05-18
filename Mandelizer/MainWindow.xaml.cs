@@ -117,26 +117,29 @@ namespace Mandelizer
                     MandelFrame.AbortRenderingFlag = false;
 
                     // check best aspect ratio
+                    double newWidth, newHeight;
                     if ((int)MandelBrotGrid.ActualWidth <= (int)MandelBrotGrid.ActualHeight)
                     {
                         // width is smaller
-                        RenderSizeRef.Width = (int)MandelBrotGrid.ActualWidth;
-                        RenderSizeRef.Height = (int)(RenderSizeRef.Width * Constants.GausRatioXY);
+                        newWidth = MandelBrotGrid.ActualWidth;
+                        newHeight = newWidth * Constants.GausRatioXY;
                     }
                     else
                     {
                         // height is smaller
-                        RenderSizeRef.Height = (int)MandelBrotGrid.ActualHeight;
-                        RenderSizeRef.Width = (int)(RenderSizeRef.Height * Constants.GausRatioYX);
+                        newHeight = MandelBrotGrid.ActualHeight;
+                        newWidth = newHeight * Constants.GausRatioYX;
                     }
+
+                    RenderSizeRef.ChangeDisplaySize(newWidth, newHeight);
 
                     InvokeOnMainWindow(() =>
                     {
                         // set wpf control size
-                        MandelBrotImage.Width = RenderSizeRef.Width;
-                        MandelBrotImage.Height = RenderSizeRef.Height;
-                        MandelBrotCanvas.Width = RenderSizeRef.Width;
-                        MandelBrotCanvas.Height = RenderSizeRef.Height;
+                        MandelBrotImage.Width = RenderSizeRef.DisplayWidth;
+                        MandelBrotImage.Height = RenderSizeRef.DisplayHeight;
+                        MandelBrotCanvas.Width = RenderSizeRef.DisplayWidth;
+                        MandelBrotCanvas.Height = RenderSizeRef.DisplayHeight;
 
                         UpdateLayout();
                     });
@@ -147,7 +150,7 @@ namespace Mandelizer
                         {
                             // grab a new fast image
                             FastImageRef?.Dispose();
-                            FastImageRef = new FastImage(MandelBrotImage, RenderSizeRef.Width, RenderSizeRef.Height);
+                            FastImageRef = new FastImage(MandelBrotImage, RenderSizeRef.RenderWidth, RenderSizeRef.RenderHeight);
                         });
 
                         // re-render
@@ -167,12 +170,12 @@ namespace Mandelizer
             double complexPlaneHeight = CurrentFrame.Position.YDiff;
 
             // magnitude of starting points in complex plane
-            double complexRectX = (complexPlaneWidth * e.StartX) / RenderSizeRef.Width;
-            double complexRectY = (complexPlaneHeight * e.StartY) / RenderSizeRef.Height; 
+            double complexRectX = (complexPlaneWidth * e.StartX) / RenderSizeRef.DisplayWidth;
+            double complexRectY = (complexPlaneHeight * e.StartY) / RenderSizeRef.DisplayHeight; 
 
             // length of the zooming rectangle in the complex plane
-            double complexRectWidth = (complexPlaneWidth * e.Width) / RenderSizeRef.Width;
-            double complexRectHeight = (complexPlaneHeight * e.Height) / RenderSizeRef.Height;
+            double complexRectWidth = (complexPlaneWidth * e.Width) / RenderSizeRef.DisplayWidth;
+            double complexRectHeight = (complexPlaneHeight * e.Height) / RenderSizeRef.DisplayHeight;
             
             // calculate new positions in mandelbrot set
             MandelPos pos = new MandelPos(CurrentFrame.Position.XMin + complexRectX,
