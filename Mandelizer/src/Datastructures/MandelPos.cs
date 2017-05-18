@@ -7,11 +7,11 @@ namespace Mandelizer.Datastructures
     /// </summary>
     public class MandelPos
     {
-        public double XMin;
-        public double XMax;
+        public double XMin { get; set; }
+        public double XMax { get; set; }
 
-        public double YMin;
-        public double YMax;
+        public double YMin { get; set; }
+        public double YMax { get; set; }
 
         public double XDiff => Math.Abs(XMax - XMin);
         public double YDiff => Math.Abs(YMax - YMin);
