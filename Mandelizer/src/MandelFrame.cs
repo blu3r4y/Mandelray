@@ -26,6 +26,9 @@ namespace Mandelizer
         // bufferd data
         private int[,] _iterationStore;
 
+        // Math.Log(2)
+        private const double OneOverLogTwo = 1.4426950408889634;
+
         /// <summary>
         /// maximum iterations which are used on this frame
         /// </summary>
@@ -151,6 +154,19 @@ namespace Mandelizer
                             iterations++;
                         }
 
+                        if (iterations < maxIt)
+                        {
+                            // (c) https://en.wikipedia.org/wiki/Mandelbrot_set#Continuous_.28smooth.29_coloring
+
+                            double zLog = Math.Log(zReSq + zImSq) / 2;
+                            var nu = (int) (Math.Log(zLog * OneOverLogTwo) * OneOverLogTwo);
+                            iterations = iterations + 1 - nu;
+                        }
+                        else
+                        {
+                            iterations = int.MaxValue;
+                        }
+
                         // save for further access
                         _iterationStore[x, y] = iterations;
 
@@ -232,23 +248,13 @@ namespace Mandelizer
         [MethodImpl(MethodImplOptions.AggressiveInlining)]
         private void SetPixel(long ptr, int x, int y, int iterationsValue)
         {
-            int mappedIt;
+            if (_mainWindow.FastImageRef.Disposed) return;
 
-            if (Constants.ColorGradientIterative)
-            {
-                if (iterationsValue == MaxIterations) mappedIt = (_mainWindow.ColorMapRef.Length - 1);
-                else mappedIt = iterationsValue - iterationsValue / _mainWindow.ColorMapRef.Length * _mainWindow.ColorMapRef.Length;
-            }
-            else
-            {
-                mappedIt = (_mainWindow.ColorMapRef.Length - 1) * iterationsValue / MaxIterations;
-            }
-            
-            // set pixel
-            if (!_mainWindow.FastImageRef.Disposed)
-            {
-                _mainWindow.FastImageRef.SetPixel(ptr, x, y, _mainWindow.ColorMapRef[mappedIt].ToArgb());
-            }
+            int index = iterationsValue < int.MaxValue
+                ? iterationsValue % _mainWindow.ColorMapRef.Length
+                : _mainWindow.ColorMapMaxIterationsRef;
+
+            _mainWindow.FastImageRef.SetPixel(ptr, x, y, _mainWindow.ColorMapRef[index]);
         }
     }
 }

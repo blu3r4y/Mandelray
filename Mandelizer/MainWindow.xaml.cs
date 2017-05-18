@@ -23,9 +23,14 @@ namespace Mandelizer
         public FastImage FastImageRef { get; private set; }
 
         /// <summary>
-        /// the used coler map for all frames
+        /// the used coler map for all frames in argb32 encoding
         /// </summary>
-        public Color[] ColorMapRef => ColorMappings.SelectedItem.Colors;
+        public int[] ColorMapRef => ColorMappings.SelectedItem.Colors;
+
+        /// <summary>
+        /// the index within the color map, which should be used for maximum iterations
+        /// </summary>
+        public int ColorMapMaxIterationsRef => ColorMappings.SelectedItem.IndexMaxIterations;
 
         /// <summary>
         /// keeps the current render size information

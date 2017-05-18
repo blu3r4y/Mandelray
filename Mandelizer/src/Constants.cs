@@ -8,11 +8,6 @@ namespace Mandelizer
     public static class Constants
     {
         /// <summary>
-        /// color gradient schema
-        /// </summary>
-        public const bool ColorGradientIterative = true;
-
-        /// <summary>
         /// initial start position of mandel
         /// </summary>
         public static readonly MandelPos DefaultPos;
