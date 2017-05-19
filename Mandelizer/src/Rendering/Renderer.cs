@@ -3,6 +3,9 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Mandelizer.Datastructures;
+using System.Linq;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 
 namespace Mandelizer.Rendering
 {
@@ -63,9 +66,27 @@ namespace Mandelizer.Rendering
 
             var options = new ParallelOptions { CancellationToken = tokenSource.Token };
 
+            // start rendering from the center
+            var source = new[]
+            {
+                // middle area
+                RangeMinMaxInclusive(GetIndex(height, 0.33, false), GetIndex(height, 0.66, true)),
+                // top (reversed)
+                RangeMinMaxInclusive(0, GetIndex(height, 0.33, true)).Reverse(),
+                // bottom
+                RangeMinMaxInclusive(GetIndex(height, 0.66, false), height - 1)
+            }
+            .SelectMany(x => x).ToArray();
+
+            // if (source.Distinct().Count() == source.Count()) throw new Exception("implementation error");
+            
+            OrderablePartitioner<int> partitioner = Partitioner.Create(source, true);
+
+            Stopwatch sw = Stopwatch.StartNew();
+
             try
             {
-                ParallelLoopResult result = Parallel.For(0, height, options, () => 0, (y, state, threadLocal) =>
+                ParallelLoopResult result = Parallel.ForEach(partitioner, options, () => 0, (y, state, threadLocal) =>
                     {
                         double zRe, zIm, zReSq, zImSq, zReTmp;
                         int iterations;
@@ -145,6 +166,26 @@ namespace Mandelizer.Rendering
 
             Trace.WriteLine($"=> Calculation took {stopwatch.ElapsedMilliseconds} milliseconds.");
             
+        }
+
+        private static int GetIndex(int value, double rate, bool lower)
+        {
+            double factor = 1.0 / rate;
+            double part = value / factor;
+
+            if (value % factor == 0)
+            {
+                return (int) (lower ? part : part + 1);
+            }
+            else
+            {
+                return (int) (lower ? Math.Floor(part) : Math.Ceiling(part));
+            }
+        }
+
+        private static IEnumerable<int> RangeMinMaxInclusive(int min, int max)
+        {
+            return Enumerable.Range(min, max - min + 1);
         }
 
         public void Dispose()
