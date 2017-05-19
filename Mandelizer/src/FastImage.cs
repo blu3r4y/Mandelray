@@ -20,11 +20,8 @@ namespace Mandelizer
         // some image characteristics
         private readonly int _width;
         private readonly int _height;
-        private readonly int _bitsPerPixel = PixelFormats.Bgr32.BitsPerPixel / 8;
 
         private readonly WriteableBitmap _writeableBitmap;
-
-        private BitmapContext _context;
 
         public FastImage(Image image, int width, int height)
         {
@@ -41,6 +38,7 @@ namespace Mandelizer
         /// <summary>
         /// sets the pixel in the image directly and fast.
         /// </summary>
+        /// <param name="ptr">The pointer to the back buffer</param>
         /// <param name="x">horizontal coordinate</param>
         /// <param name="y">vertical coordinate</param>
         /// <param name="color">32bit argb value of the pixel</param>
@@ -49,6 +47,42 @@ namespace Mandelizer
             unsafe
             {
                 ((int*)ptr)[y * _width + x] = color;
+            }
+        }
+
+        public long GetPointer()
+        {
+            long ptr = 0;
+
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                ptr = (long)_writeableBitmap.BackBuffer;
+            }, DispatcherPriority.Render);
+
+            return ptr;
+        }
+
+        public void Dirty()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _writeableBitmap.Lock();
+                _writeableBitmap.AddDirtyRect(new Int32Rect(0, 0, _width, _height));
+                _writeableBitmap.Unlock();
+            }, DispatcherPriority.Render);
+        }
+
+        public void Dirty(int fromLine, int height)
+        {
+            // ignore invalid dirty requests
+            if (fromLine + height <= _height)
+            {
+                Application.Current.Dispatcher.Invoke(() =>
+                {
+                    _writeableBitmap.Lock();
+                    _writeableBitmap.AddDirtyRect(new Int32Rect(0, fromLine, _width, height));
+                    _writeableBitmap.Unlock();
+                }, DispatcherPriority.Render);
             }
         }
 
@@ -72,21 +106,6 @@ namespace Mandelizer
                 _writeableBitmap.AddDirtyRect(new Int32Rect(0, 0, _width, _height));
                 _writeableBitmap.Unlock();
             }, DispatcherPriority.Render);
-        }
-
-        public long UnlockLock()
-        {
-            long ptr = 0;
-
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                _writeableBitmap.AddDirtyRect(new Int32Rect(0, 0, _width, _height));
-                _writeableBitmap.Unlock();
-                _writeableBitmap.Lock();
-                ptr = (long)_writeableBitmap.BackBuffer;
-            }, DispatcherPriority.Render);
-
-            return ptr;
         }
 
         /// <summary>

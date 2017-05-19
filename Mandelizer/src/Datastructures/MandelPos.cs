@@ -7,6 +7,11 @@ namespace Mandelizer.Datastructures
     /// </summary>
     public class MandelPos
     {
+        /// <summary>
+        /// initial start position of mandel
+        /// </summary>
+        public static readonly MandelPos DefaultPos;
+
         public double XMin { get; set; }
         public double XMax { get; set; }
 
@@ -15,6 +20,12 @@ namespace Mandelizer.Datastructures
 
         public double XDiff => Math.Abs(XMax - XMin);
         public double YDiff => Math.Abs(YMax - YMin);
+
+        static MandelPos()
+        {
+            // starting position
+            DefaultPos = new MandelPos(-2.5, 1.5, -1.5, 1.5);
+        }
 
         public MandelPos(double xmin, double xmax, double ymin, double ymax)
         {

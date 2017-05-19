@@ -19,15 +19,13 @@
             ChangeDisplaySize(displayWidth, displayHeight);
         }
 
-        public RenderSize ChangeDisplaySize(double displayWidth, double displayHeight)
+        public void ChangeDisplaySize(double displayWidth, double displayHeight)
         {
             DisplayWidth = displayWidth;
             DisplayHeight = displayHeight;
 
             RenderWidth = (int)(displayWidth * SupersamplingFactor);
             RenderHeight = (int)(displayHeight * SupersamplingFactor);
-
-            return this;
         }
     }
 }

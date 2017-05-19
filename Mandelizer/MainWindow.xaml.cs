@@ -9,7 +9,6 @@ using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
 using Mandelizer.Datastructures;
-using Color = System.Drawing.Color;
 
 namespace Mandelizer
 {
@@ -25,12 +24,7 @@ namespace Mandelizer
         /// <summary>
         /// the used coler map for all frames in argb32 encoding
         /// </summary>
-        public int[] ColorMapRef => ColorMappings.SelectedItem.Colors;
-
-        /// <summary>
-        /// the index within the color map, which should be used for maximum iterations
-        /// </summary>
-        public int ColorMapMaxIterationsRef => ColorMappings.SelectedItem.IndexMaxIterations;
+        public ColorMappings.ColorMap ColorMapRef => ColorMappings.SelectedItem;
 
         /// <summary>
         /// keeps the current render size information
@@ -65,7 +59,7 @@ namespace Mandelizer
         /// <summary>
         /// current displayed position
         /// </summary>
-        public MandelPos CurrentPos => CurrentFrame != null ? CurrentFrame.Position : Constants.DefaultPos;
+        public MandelPos CurrentPos => CurrentFrame != null ? CurrentFrame.Position : MandelPos.DefaultPos;
 
         // handles zooming
         private readonly ZoomSelectionHandler _zoomSelectionHandler;
@@ -101,7 +95,7 @@ namespace Mandelizer
             PositionStackPanel.DataContext = this;
 
             // enque and render initial mandelbrot set
-            SubmitFrame(new MandelFrame(this, Constants.DefaultPos));
+            SubmitFrame(new MandelFrame(this, MandelPos.DefaultPos));
         }
 
         /// <summary>
@@ -116,10 +110,10 @@ namespace Mandelizer
             Thread refreshThread = new Thread(() =>
             {
                 // suppress rendering actions while the windows is changed
-                MandelFrame.AbortRenderingFlag = true;
-                lock (Constants.RenderLock)
+                MandelFrame.CancelToken.Cancel();
+                lock (MandelFrame.RenderLock)
                 {
-                    MandelFrame.AbortRenderingFlag = false;
+                    MandelFrame.ResetToken();
 
                     // check best aspect ratio
                     double newWidth, newHeight;
@@ -127,13 +121,13 @@ namespace Mandelizer
                     {
                         // width is smaller
                         newWidth = MandelBrotGrid.ActualWidth;
-                        newHeight = newWidth * Constants.GausRatioXY;
+                        newHeight = newWidth * ZoomSelectionHandler.GausRatioXy;
                     }
                     else
                     {
                         // height is smaller
                         newHeight = MandelBrotGrid.ActualHeight;
-                        newWidth = newHeight * Constants.GausRatioYX;
+                        newWidth = newHeight * ZoomSelectionHandler.GausRatioYx;
                     }
 
                     RenderSizeRef.ChangeDisplaySize(newWidth, newHeight);

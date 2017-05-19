@@ -2,7 +2,9 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
+using System.Windows.Media;
 using System.Windows.Shapes;
+using Mandelizer.Datastructures;
 
 namespace Mandelizer
 {
@@ -56,6 +58,23 @@ namespace Mandelizer
         private Point _rectStart;
         private Point _rectEnd;
 
+        /// <summary>
+        /// default aspect ratio
+        /// </summary>
+        public static readonly double GausRatioXy;
+
+        /// <summary>
+        /// default aspect ratio
+        /// </summary>
+        public static readonly double GausRatioYx;
+
+        static ZoomSelectionHandler()
+        {
+            // calculate gaussian ratios
+            GausRatioXy = MandelPos.DefaultPos.YDiff / MandelPos.DefaultPos.XDiff;
+            GausRatioYx = MandelPos.DefaultPos.XDiff / MandelPos.DefaultPos.YDiff;
+        }
+
         public ZoomSelectionHandler(Canvas referenceCanvas)
         {
             ReferenceCanvas = referenceCanvas;
@@ -63,9 +82,9 @@ namespace Mandelizer
             // light grey rectangle
             ZoomingRectangle = new Rectangle
             {
-                Stroke = System.Windows.Media.Brushes.Black,
+                Stroke = Brushes.Black,
                 StrokeThickness = 1,
-                Fill = new System.Windows.Media.SolidColorBrush(System.Windows.Media.Color.FromArgb(150, 255, 255, 255)),
+                Fill = new SolidColorBrush(Color.FromArgb(150, 255, 255, 255)),
                 HorizontalAlignment = HorizontalAlignment.Left,
                 VerticalAlignment = VerticalAlignment.Top,
                 Height = 0,
@@ -105,8 +124,8 @@ namespace Mandelizer
                 var newHeight = (int)(_rectEnd.Y - _rectStart.Y);
                 
                 // fix ratio
-                if (Math.Abs(newWidth) > Math.Abs(newHeight)) newWidth = (int)(newHeight * Constants.GausRatioYX);
-                if (Math.Abs(newHeight) > Math.Abs(newWidth)) newHeight = (int)(newWidth * Constants.GausRatioXY);
+                if (Math.Abs(newWidth) > Math.Abs(newHeight)) newWidth = (int)(newHeight * GausRatioYx);
+                if (Math.Abs(newHeight) > Math.Abs(newWidth)) newHeight = (int)(newWidth * GausRatioXy);
 
                 // only quadratic zooming in 4th quadrant allowed
                 if (newWidth > 0 && newHeight > 0)

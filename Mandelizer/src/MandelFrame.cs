@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Mandelizer.Datastructures;
+using Mandelizer.Rendering;
 
 namespace Mandelizer
 {
@@ -13,21 +12,21 @@ namespace Mandelizer
     /// </summary>
     public sealed class MandelFrame
     {
+        public static CancellationTokenSource CancelToken = new CancellationTokenSource();
+
+        /// <summary>
+        /// used for synchronization. only one object can have the rendering permission
+        /// at any time.
+        /// </summary>
+        public static readonly object RenderLock = new object();
+
         /// <summary>
         /// stores position information about this specific frame
         /// </summary>
         public MandelPos Position { get; }
-
-        /// <summary>
-        /// suspends all threads and stops rendering
-        /// </summary>
-        public static bool AbortRenderingFlag;
-
-        // bufferd data
+        
+        // buffered data
         private int[,] _iterationStore;
-
-        // Math.Log(2)
-        private const double OneOverLogTwo = 1.4426950408889634;
 
         /// <summary>
         /// maximum iterations which are used on this frame
@@ -66,10 +65,16 @@ namespace Mandelizer
             _mainWindow = mainWindowInstance;
         }
 
-        public void RenderAsync(bool draw = true)
+        public static void ResetToken()
+        {
+            CancelToken?.Dispose();
+            CancelToken = new CancellationTokenSource();
+        }
+
+        public void RenderAsync()
         {
             var t = new Thread(Render);
-            t.Start(draw);
+            t.Start();
         }
 
         public void DrawAsync()
@@ -81,112 +86,21 @@ namespace Mandelizer
         /// <summary>
         /// renders the mandelbrot and draws it on default.
         /// </summary>
-        /// <param name="obj">states if the mandelbrot frame should also be drawn directly</param>
-        [SuppressMessage("ReSharper", "TooWideLocalVariableScope")]
-        [SuppressMessage("ReSharper", "JoinDeclarationAndInitializer")]
-        private void Render(object obj = null)
+        private void Render()
         {
-            // cast value
-            if (!(obj is bool)) throw new ArgumentException();
-            var draw = (bool)obj;
-
-            // time measurement
-            DateTime startTime = DateTime.Now;
-
-            // reinit bufferd values
-            _iterationStore = new int[_mainWindow.RenderSizeRef.RenderWidth, _mainWindow.RenderSizeRef.RenderHeight];
-
-            // step width
-            double stepX = Position.XDiff/_mainWindow.RenderSizeRef.RenderWidth;
-            double stepY = Position.YDiff/_mainWindow.RenderSizeRef.RenderHeight;
-
-            int maxIt = MaxIterations;
-
             // abort ongoing rendering and try to catch the lock
-            AbortRenderingFlag = true;
-            lock (Constants.RenderLock)
+            CancelToken.Cancel();
+            lock (RenderLock)
             {
-                long ptr = _mainWindow.FastImageRef.Lock();
+                ResetToken();
 
-                AbortRenderingFlag = false;
-
-                Parallel.For(0, _mainWindow.RenderSizeRef.RenderHeight, (y, state) =>
+                using (var renderer = new Renderer(Position, _mainWindow.ColorMapRef, _mainWindow.FastImageRef, MaxIterations))
                 {
+                    renderer.Render(_mainWindow.RenderSizeRef.RenderWidth, _mainWindow.RenderSizeRef.RenderHeight, CancelToken);
 
-                    if (AbortRenderingFlag)
-                    {
-                        // abort execution of wanted
-                        state.Stop();
-                        return;
-                    }
-
-                    // declare imaginary numbers here once
-                    double cIm, cRe, zRe, zIm, zReSq, zImSq, zReTmp;
-                    int iterations;
-
-                    // imaginary axes step
-                    cIm = Position.YMin + y * stepY;
-
-                    // real axes
-                    cRe = Position.XMin;
-                    for (var x = 0; x < _mainWindow.RenderSizeRef.RenderWidth; x++)
-                    {
-                        // reset maxIterations and z
-                        zRe = 0;
-                        zIm = 0;
-                        iterations = 0;
-                        zReSq = zRe * zRe;
-                        zImSq = zIm * zIm;
-
-                        // iterate until the max number of maxIterations was not reached
-                        // or the value's magnitude  falls below 2
-                        while (iterations < maxIt && zReSq + zImSq < 4)
-                        {
-                            // z = z^2 + c
-                            zReTmp = zRe;
-                            zRe = zReSq - zImSq + cRe;
-                            zIm = zReTmp * zIm;
-                            zIm = zIm + zIm + cIm;
-
-                            zReSq = zRe * zRe;
-                            zImSq = zIm * zIm;
-
-                            iterations++;
-                        }
-
-                        if (iterations < maxIt)
-                        {
-                            // (c) https://en.wikipedia.org/wiki/Mandelbrot_set#Continuous_.28smooth.29_coloring
-
-                            double zLog = Math.Log(zReSq + zImSq) / 2;
-                            var nu = (int) (Math.Log(zLog * OneOverLogTwo) * OneOverLogTwo);
-                            iterations = iterations + 1 - nu;
-                        }
-                        else
-                        {
-                            iterations = int.MaxValue;
-                        }
-
-                        // save for further access
-                        _iterationStore[x, y] = iterations;
-
-                        // map used maxIterations to color
-                        if (draw) SetPixel(ptr, x, y, iterations);
-
-                        // real axes step
-                        cRe += stepX;
-                    }
-
-                    // refresh image every x vertical lines
-                    if (y % 10 == 0)
-                    {
-                        ptr = _mainWindow.FastImageRef.UnlockLock();
-                    }
-                });
-
-                _mainWindow.FastImageRef.Unlock();
-
-                Trace.WriteLine($"calculated mandelbrot in {(DateTime.Now - startTime).TotalMilliseconds} seconds.");
+                    // store reference to the buffer
+                    _iterationStore = renderer.Buffer;
+                }
             }
         }
 
@@ -201,31 +115,41 @@ namespace Mandelizer
                 _iterationStore.GetLength(0) == _mainWindow.RenderSizeRef.RenderWidth &&
                 _iterationStore.GetLength(1) == _mainWindow.RenderSizeRef.RenderHeight)
             {
-                long ptr = _mainWindow.FastImageRef.Lock();
 
                 // abort ongoing rendering and try to catch the lock
-                AbortRenderingFlag = true;
-                lock (Constants.RenderLock)
+                CancelToken.Cancel();
+                lock (RenderLock)
                 {
-                    AbortRenderingFlag = false;
-                    
-                    Parallel.For(0, _mainWindow.RenderSizeRef.RenderHeight, (y, state) =>
+                    ResetToken();
+
+                    long ptr = _mainWindow.FastImageRef.Lock();
+
+                    var options = new ParallelOptions { CancellationToken = CancelToken.Token };
+
+                    try
                     {
-                        if (AbortRenderingFlag)
+                        Parallel.For(0, _mainWindow.RenderSizeRef.RenderHeight, options, (y, state) =>
                         {
-                            // abort execution of wanted
-                            state.Stop();
-                            return;
-                        }
-
-                        for (var x = 0; x < _mainWindow.RenderSizeRef.RenderWidth; x++)
-                        {
-                            SetPixel(ptr, x, y, _iterationStore[x, y]);
-                        }
-
-                        // refresh image every 100 vertical lines
-                        // if (y % 100 == 0) _mainWindow.FastImageRef.Invalidate();
-                    });
+                            for (var x = 0; x < _mainWindow.RenderSizeRef.RenderWidth; x++)
+                            {
+                                int value = _iterationStore[x, y];
+                                if (value != int.MaxValue)
+                                {
+                                    _mainWindow.FastImageRef.SetPixel(ptr, x, y,
+                                        _mainWindow.ColorMapRef.Colors[value % _mainWindow.ColorMapRef.Colors.Length]);
+                                }
+                                else
+                                {
+                                    _mainWindow.FastImageRef.SetPixel(ptr, x, y,
+                                        _mainWindow.ColorMapRef.Colors[_mainWindow.ColorMapRef.IndexMaxIterations]);
+                                }
+                            }
+                        });
+                    }
+                    catch (OperationCanceledException)
+                    {
+                        Trace.WriteLine("=> ## Aborted rendering from buffer.");
+                    }
 
                     _mainWindow.FastImageRef.Unlock();
                 }
@@ -233,28 +157,8 @@ namespace Mandelizer
             else
             {
                 // otherwise re-rendering with new dimensions is required
-                Render(true);
+                Render();
             }
-        }
-        
-        /// <summary>
-        /// sets the pixel by considerung the used color schema.
-        /// this pseudo method should be inlined by the compiler if possible,
-        /// so it can be safley used inside loops with multiple calls to it.
-        /// </summary>
-        /// <param name="x">horizontal position</param>
-        /// <param name="y">vertical position</param>
-        /// <param name="iterationsValue">the needed maxIterations for this pixel</param>
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private void SetPixel(long ptr, int x, int y, int iterationsValue)
-        {
-            if (_mainWindow.FastImageRef.Disposed) return;
-
-            int index = iterationsValue < int.MaxValue
-                ? iterationsValue % _mainWindow.ColorMapRef.Length
-                : _mainWindow.ColorMapMaxIterationsRef;
-
-            _mainWindow.FastImageRef.SetPixel(ptr, x, y, _mainWindow.ColorMapRef[index]);
         }
     }
 }
