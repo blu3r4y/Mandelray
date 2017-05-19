@@ -9,23 +9,28 @@ using MathNet.Numerics.Interpolation;
 namespace Mandelizer.Datastructures
 {
     /// <summary>
-    /// supplies some color mapping arrays
+    /// Supplies some color mapping arrays
     /// </summary>
     public class ColorMappings
     {
         /// <summary>
-        /// gets fired if the selected color mapping changes
+        /// Gets fired if the selected color mapping changes
         /// </summary>
         /// <param name="map">the new color map</param>
         public delegate void SelectedItemChangedEventHandler(ColorMap map);
 
         /// <summary>
-        /// represents a color mapping by a name and the corresponding color array
+        /// Represents a color mapping by a name and the corresponding color array
         /// </summary>
         public class ColorMap
         {
             private string Name { get; }
             public int[] Colors { get; }
+
+            /// <summary>
+            /// The index within the palette, which should be used for coloring areas,
+            /// where we reached the maximum number of iterations.
+            /// </summary>
             public readonly int IndexMaxIterations;
 
             public ColorMap(string name, IEnumerable<Color> colors, int indexMaxIterations = 0)
@@ -72,7 +77,7 @@ namespace Mandelizer.Datastructures
         public static event SelectedItemChangedEventHandler ItemChanged;
 
         public static readonly Color[] GrayScale;
-        public static Color[] MultiColor { get; }
+        public static readonly Color[] MultiColor;
         public static readonly Color[] UltraFractal;
 
         static ColorMappings()

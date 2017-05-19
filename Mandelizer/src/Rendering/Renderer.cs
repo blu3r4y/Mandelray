@@ -12,11 +12,6 @@ namespace Mandelizer.Rendering
     public class Renderer : IDisposable
     {
         /// <summary>
-        /// After how many lines should we invalidate the graphics?
-        /// </summary>
-        public const int InvalidateAfterLines = 256;
-
-        /// <summary>
         /// Contains the number of iterations
         /// </summary>
         public int[,] Buffer { get; private set; }
@@ -47,7 +42,7 @@ namespace Mandelizer.Rendering
             var stopwatch = new Stopwatch();
             stopwatch.Start();
 
-            // reinit bufferd values
+            // reinit buffered values
             Buffer = new int[width, height];
 
             double yMin = _position.YMin;
