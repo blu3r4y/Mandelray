@@ -30,7 +30,7 @@ namespace Mandelizer
 
             // bind the source of the image to this map
             _writeableBitmap = BitmapFactory.New(width, height);
-            _writeableBitmap.Clear(Colors.White);
+            _writeableBitmap.Clear(Colors.Transparent);
             
             image.Source = _writeableBitmap;
         }
@@ -60,6 +60,17 @@ namespace Mandelizer
             }, DispatcherPriority.Render);
 
             return ptr;
+        }
+
+        public void Clear()
+        {
+            Application.Current.Dispatcher.Invoke(() =>
+            {
+                _writeableBitmap.Lock();
+                _writeableBitmap.Clear(Colors.Transparent);
+                _writeableBitmap.AddDirtyRect(new Int32Rect(0, 0, _width, _height));
+                _writeableBitmap.Unlock();
+            }, DispatcherPriority.Render);
         }
 
         public void Dirty()

@@ -22,6 +22,11 @@ namespace Mandelizer
         public FastImage FastImageRef { get; private set; }
 
         /// <summary>
+        /// stores the object, which holds a handle to render the wpf image faster
+        /// </summary>
+        public FastImage FastImagePreviewRef { get; private set; }
+
+        /// <summary>
         /// the used coler map for all frames in argb32 encoding
         /// </summary>
         public ColorMappings.ColorMap ColorMapRef => ColorMappings.SelectedItem;
@@ -137,6 +142,8 @@ namespace Mandelizer
                         // set wpf control size
                         MandelBrotImage.Width = RenderSizeRef.DisplayWidth;
                         MandelBrotImage.Height = RenderSizeRef.DisplayHeight;
+                        MandelBrotImagePreview.Width = RenderSizeRef.DisplayWidth;
+                        MandelBrotImagePreview.Height = RenderSizeRef.DisplayHeight;
                         MandelBrotCanvas.Width = RenderSizeRef.DisplayWidth;
                         MandelBrotCanvas.Height = RenderSizeRef.DisplayHeight;
 
@@ -150,6 +157,9 @@ namespace Mandelizer
                             // grab a new fast image
                             FastImageRef?.Dispose();
                             FastImageRef = new FastImage(MandelBrotImage, RenderSizeRef.RenderWidth, RenderSizeRef.RenderHeight);
+                            
+                            FastImagePreviewRef?.Dispose();
+                            FastImagePreviewRef = new FastImage(MandelBrotImagePreview, RenderSizeRef.PreviewWidth, RenderSizeRef.PreviewHeight);
                         });
 
                         // re-render

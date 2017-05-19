@@ -20,6 +20,7 @@
         </Grid.ColumnDefinitions>
 
         <Grid HorizontalAlignment="Stretch" Name="MandelBrotGrid" VerticalAlignment="Stretch" Background="{x:Null}">
+            <Image Name="MandelBrotImagePreview" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <Image Name="MandelBrotImage" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
             <Canvas HorizontalAlignment="Center" Name="MandelBrotCanvas" VerticalAlignment="Center" MouseLeftButtonDown="MandelBrotCanvas_MouseLeftButtonDown" MouseMove="MandelBrotCanvas_MouseMove" PreviewMouseLeftButtonUp="MandelBrotCanvas_PreviewMouseLeftButtonUp" MouseLeave="MandelBrotCanvas_MouseLeave">
                 <Canvas.Background>

@@ -94,8 +94,15 @@ namespace Mandelizer
             {
                 ResetToken();
 
+                using (var renderer = new Renderer(Position, _mainWindow.ColorMapRef, _mainWindow.FastImagePreviewRef, MaxIterations))
+                {
+                    //_mainWindow.FastImagePreviewRef.Clear();
+                    renderer.Render(_mainWindow.RenderSizeRef.PreviewWidth, _mainWindow.RenderSizeRef.PreviewHeight, CancelToken);
+                }
+
                 using (var renderer = new Renderer(Position, _mainWindow.ColorMapRef, _mainWindow.FastImageRef, MaxIterations))
                 {
+                    _mainWindow.FastImageRef.Clear();
                     renderer.Render(_mainWindow.RenderSizeRef.RenderWidth, _mainWindow.RenderSizeRef.RenderHeight, CancelToken);
 
                     // store reference to the buffer
@@ -123,6 +130,7 @@ namespace Mandelizer
                     ResetToken();
 
                     long ptr = _mainWindow.FastImageRef.Lock();
+                    _mainWindow.FastImageRef.Clear();
 
                     var options = new ParallelOptions { CancellationToken = CancelToken.Token };
 
