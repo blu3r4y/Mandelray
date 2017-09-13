@@ -29,11 +29,11 @@
             DisplayWidth = displayWidth;
             DisplayHeight = displayHeight;
 
-            RenderWidth = (int)(displayWidth * SupersamplingFactor);
-            RenderHeight = (int)(displayHeight * SupersamplingFactor);
+            RenderWidth = (int) (displayWidth * SupersamplingFactor);
+            RenderHeight = (int) (displayHeight * SupersamplingFactor);
 
-            PreviewWidth = (int)(displayWidth * PreviewFactor);
-            PreviewHeight = (int)(displayHeight * PreviewFactor);
+            PreviewWidth = (int) (displayWidth * PreviewFactor);
+            PreviewHeight = (int) (displayHeight * PreviewFactor);
         }
     }
 }

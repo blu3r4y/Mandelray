@@ -40,8 +40,8 @@ namespace Mandelizer.Util
         private static void SaveUsingEncoder(FrameworkElement visual, string fileName, BitmapEncoder encoder)
         {
             var bitmap = new RenderTargetBitmap(
-                (int)visual.ActualWidth,
-                (int)visual.ActualHeight,
+                (int) visual.ActualWidth,
+                (int) visual.ActualHeight,
                 96,
                 96,
                 System.Windows.Media.PixelFormats.Pbgra32);

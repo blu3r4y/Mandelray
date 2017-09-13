@@ -42,7 +42,7 @@ namespace Mandelizer
         /// holds all the frames which got calculated already
         /// </summary>
         public List<MandelFrame> FrameBuffer = new List<MandelFrame>();
-        
+
         /// <summary>
         /// holds the current index within the frame buffer
         /// </summary>
@@ -96,7 +96,7 @@ namespace Mandelizer
 
             // add zooming rectangle
             MandelBrotCanvas.Children.Add(_zoomSelectionHandler.ZoomingRectangle);
-            
+
             // setup data binding
             DataContext = this;
             PositionStackPanel.DataContext = this;
@@ -124,7 +124,7 @@ namespace Mandelizer
 
                     // check best aspect ratio
                     double newWidth, newHeight;
-                    if ((int)MandelBrotGrid.ActualWidth <= (int)MandelBrotGrid.ActualHeight)
+                    if ((int) MandelBrotGrid.ActualWidth <= (int) MandelBrotGrid.ActualHeight)
                     {
                         // width is smaller
                         newWidth = MandelBrotGrid.ActualWidth;
@@ -158,10 +158,12 @@ namespace Mandelizer
                         {
                             // grab a new fast image
                             FastImageRef?.Dispose();
-                            FastImageRef = new FastImage(MandelBrotImage, RenderSizeRef.RenderWidth, RenderSizeRef.RenderHeight);
-                            
+                            FastImageRef = new FastImage(MandelBrotImage, RenderSizeRef.RenderWidth,
+                                RenderSizeRef.RenderHeight);
+
                             FastImagePreviewRef?.Dispose();
-                            FastImagePreviewRef = new FastImage(MandelBrotImagePreview, RenderSizeRef.PreviewWidth, RenderSizeRef.PreviewHeight);
+                            FastImagePreviewRef = new FastImage(MandelBrotImagePreview, RenderSizeRef.PreviewWidth,
+                                RenderSizeRef.PreviewHeight);
                         });
 
                         // re-render
@@ -182,18 +184,18 @@ namespace Mandelizer
 
             // magnitude of starting points in complex plane
             double complexRectX = (complexPlaneWidth * e.StartX) / RenderSizeRef.DisplayWidth;
-            double complexRectY = (complexPlaneHeight * e.StartY) / RenderSizeRef.DisplayHeight; 
+            double complexRectY = (complexPlaneHeight * e.StartY) / RenderSizeRef.DisplayHeight;
 
             // length of the zooming rectangle in the complex plane
             double complexRectWidth = (complexPlaneWidth * e.Width) / RenderSizeRef.DisplayWidth;
             double complexRectHeight = (complexPlaneHeight * e.Height) / RenderSizeRef.DisplayHeight;
-            
+
             // calculate new positions in mandelbrot set
             MandelPos pos = new MandelPos(CurrentFrame.Position.XMin + complexRectX,
                 CurrentFrame.Position.XMin + complexRectX + complexRectWidth,
                 CurrentFrame.Position.YMin + complexRectY,
                 CurrentFrame.Position.YMin + complexRectY + complexRectHeight);
-            
+
             // enque and render
             SubmitFrame(new MandelFrame(this, pos));
         }
@@ -247,8 +249,7 @@ namespace Mandelizer
 
         #region Handler Wrapper
 
-        private
-        void Window_SizeChanged(object sender, SizeChangedEventArgs e)
+        private void Window_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             RefreshRenderSize(true);
         }
@@ -277,6 +278,7 @@ namespace Mandelizer
         {
             CurrentFrame?.RenderAsync();
         }
+
         private void ButtonPrevious_Click(object sender, RoutedEventArgs e)
         {
             if (CanStepBack)
@@ -294,6 +296,7 @@ namespace Mandelizer
                 RedrawCurrentFrame();
             }
         }
+
         private void ButtonStartPositon_Click(object sender, RoutedEventArgs e)
         {
             FrameBufferIndex = 0;

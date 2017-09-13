@@ -56,6 +56,7 @@ namespace Mandelizer.Util
 
         // rectangle points
         private Point _rectStart;
+
         private Point _rectEnd;
 
         /// <summary>
@@ -78,7 +79,7 @@ namespace Mandelizer.Util
         public ZoomSelectionHandler(Canvas referenceCanvas)
         {
             ReferenceCanvas = referenceCanvas;
-            
+
             // light grey rectangle
             ZoomingRectangle = new Rectangle
             {
@@ -95,15 +96,15 @@ namespace Mandelizer.Util
         public void StartSelection(MouseEventArgs e)
         {
             _isZooming = true;
-            
+
             // set start point
             _rectStart.X = e.GetPosition(ReferenceCanvas).X;
             _rectStart.Y = e.GetPosition(ReferenceCanvas).Y;
-            
+
             // set end point
             _rectEnd.X = _rectStart.X;
             _rectStart.Y = _rectStart.Y;
-            
+
             // reset rectangle
             ZoomingRectangle.Width = 0;
             ZoomingRectangle.Height = 0;
@@ -118,14 +119,14 @@ namespace Mandelizer.Util
                 // set end point
                 _rectEnd.X = e.GetPosition(ReferenceCanvas).X;
                 _rectEnd.Y = e.GetPosition(ReferenceCanvas).Y;
-                
+
                 // grab width and height
-                var newWidth = (int)(_rectEnd.X - _rectStart.X);
-                var newHeight = (int)(_rectEnd.Y - _rectStart.Y);
-                
+                var newWidth = (int) (_rectEnd.X - _rectStart.X);
+                var newHeight = (int) (_rectEnd.Y - _rectStart.Y);
+
                 // fix ratio
-                if (Math.Abs(newWidth) > Math.Abs(newHeight)) newWidth = (int)(newHeight * GausRatioYx);
-                if (Math.Abs(newHeight) > Math.Abs(newWidth)) newHeight = (int)(newWidth * GausRatioXy);
+                if (Math.Abs(newWidth) > Math.Abs(newHeight)) newWidth = (int) (newHeight * GausRatioYx);
+                if (Math.Abs(newHeight) > Math.Abs(newWidth)) newHeight = (int) (newWidth * GausRatioXy);
 
                 // only quadratic zooming in 4th quadrant allowed
                 if (newWidth > 0 && newHeight > 0)
@@ -142,10 +143,10 @@ namespace Mandelizer.Util
             if (_isZooming)
             {
                 // remember positions
-                var startX = (int)ZoomingRectangle.Margin.Left;
-                var startY = (int)ZoomingRectangle.Margin.Top;
-                var width = (int)ZoomingRectangle.Width;
-                var height = (int)ZoomingRectangle.Height;
+                var startX = (int) ZoomingRectangle.Margin.Left;
+                var startY = (int) ZoomingRectangle.Margin.Top;
+                var width = (int) ZoomingRectangle.Width;
+                var height = (int) ZoomingRectangle.Height;
 
                 // disable zooming and hide rectangle
                 AbortSelection();
@@ -159,7 +160,7 @@ namespace Mandelizer.Util
         {
             // disable zooming
             _isZooming = false;
-            
+
             // hide rectangle
             ZoomingRectangle.Width = 0;
             ZoomingRectangle.Height = 0;

@@ -37,7 +37,6 @@ namespace Mandelizer.Datastructures
             public ColorMap(string name, IEnumerable<Color> colors, int indexMaxIterations = 0)
                 : this(name, colors.Select(e => e.ToArgb()).ToArray(), indexMaxIterations)
             {
-
             }
 
             public ColorMap(string name, int[] colors, int indexMaxIterations = 0)
@@ -65,6 +64,7 @@ namespace Mandelizer.Datastructures
                 ItemChanged?.Invoke(value);
             }
         }
+
         private static ColorMap _selectedItem;
 
         /// <summary>
@@ -87,8 +87,8 @@ namespace Mandelizer.Datastructures
 
             const int ultraFractalSize = 128;
             UltraFractal = new Color[ultraFractalSize];
-            
-            var points = new []
+
+            var points = new[]
             {
                 0.0,
                 0.16 * ultraFractalSize,
@@ -137,14 +137,14 @@ namespace Mandelizer.Datastructures
             /* multi color 1 */
 
             MultiColor = new Color[256];
-            MultiColor[0] = Color.FromArgb(255, 255, 255);    // white
-            MultiColor[31] = Color.FromArgb(255, 255, 0);     // yellow
-            MultiColor[63] = Color.FromArgb(0, 255, 0);       // green
-            MultiColor[95] = Color.FromArgb(0, 255, 255);     // light blue
-            MultiColor[127] = Color.FromArgb(0, 0, 255);      // blue
-            MultiColor[159] = Color.FromArgb(255, 0, 255);    // violet
-            MultiColor[191] = Color.FromArgb(255, 0, 0);      // red
-            MultiColor[225] = Color.FromArgb(0, 0, 0);        // black
+            MultiColor[0] = Color.FromArgb(255, 255, 255); // white
+            MultiColor[31] = Color.FromArgb(255, 255, 0); // yellow
+            MultiColor[63] = Color.FromArgb(0, 255, 0); // green
+            MultiColor[95] = Color.FromArgb(0, 255, 255); // light blue
+            MultiColor[127] = Color.FromArgb(0, 0, 255); // blue
+            MultiColor[159] = Color.FromArgb(255, 0, 255); // violet
+            MultiColor[191] = Color.FromArgb(255, 0, 0); // red
+            MultiColor[225] = Color.FromArgb(0, 0, 0); // black
 
             for (var i = 1; i <= 30; i++)
             {
@@ -169,7 +169,7 @@ namespace Mandelizer.Datastructures
                 new ColorMap("Multi Color", MultiColor),
                 new ColorMap("Grayscale", GrayScale)
             };
-            
+
             SelectedItem = Items[0];
         }
 

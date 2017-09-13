@@ -6,23 +6,28 @@
         xmlns:mandelizer="clr-namespace:Mandelizer"
         xmlns:datastructures="clr-namespace:Mandelizer.Datastructures"
         mc:Ignorable="d"
-        Title="Mandelizer v3.0" Height="538" Width="766" Icon="../img/icon.ico" ContentRendered="Window_ContentRendered" SizeChanged="Window_SizeChanged"
+        Title="Mandelizer v3.0" Height="538" Width="766" Icon="../img/icon.ico"
+        ContentRendered="Window_ContentRendered" SizeChanged="Window_SizeChanged"
         d:DataContext="{d:DesignInstance mandelizer:MainWindow}">
     <Grid>
 
         <Grid.Resources>
-            <datastructures:ColorMappings x:Key="viewM"/>
+            <datastructures:ColorMappings x:Key="ViewM" />
         </Grid.Resources>
 
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="240"></ColumnDefinition>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="240" />
         </Grid.ColumnDefinitions>
 
         <Grid HorizontalAlignment="Stretch" Name="MandelBrotGrid" VerticalAlignment="Stretch" Background="{x:Null}">
-            <Image Name="MandelBrotImagePreview" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
+            <Image Name="MandelBrotImagePreview" Stretch="Uniform" HorizontalAlignment="Center"
+                   VerticalAlignment="Center" />
             <Image Name="MandelBrotImage" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center" />
-            <Canvas HorizontalAlignment="Center" Name="MandelBrotCanvas" VerticalAlignment="Center" MouseLeftButtonDown="MandelBrotCanvas_MouseLeftButtonDown" MouseMove="MandelBrotCanvas_MouseMove" PreviewMouseLeftButtonUp="MandelBrotCanvas_PreviewMouseLeftButtonUp" MouseLeave="MandelBrotCanvas_MouseLeave">
+            <Canvas HorizontalAlignment="Center" Name="MandelBrotCanvas" VerticalAlignment="Center"
+                    MouseLeftButtonDown="MandelBrotCanvas_MouseLeftButtonDown" MouseMove="MandelBrotCanvas_MouseMove"
+                    PreviewMouseLeftButtonUp="MandelBrotCanvas_PreviewMouseLeftButtonUp"
+                    MouseLeave="MandelBrotCanvas_MouseLeave">
                 <Canvas.Background>
                     <SolidColorBrush />
                 </Canvas.Background>
@@ -31,60 +36,67 @@
 
         <ScrollViewer Grid.Column="1">
             <WrapPanel Name="WrapPanelControls">
-                
-                <Expander Width="200" Margin="8"  Header="Calculation" IsExpanded="True" Name="ExpanderBerechnung">
+
+                <Expander Width="200" Margin="8" Header="Calculation" IsExpanded="True" Name="ExpanderBerechnung">
                     <StackPanel Margin="5" Orientation="Vertical">
                         <StackPanel Margin="0, 0, 0, 10" Orientation="Horizontal">
-                            <Button IsEnabled="{Binding CanStepBack}" Name="ButtonPrevious" MinWidth="30" Margin="2" Content="&lt;" Click="ButtonPrevious_Click"></Button>
-                            <Button IsEnabled="{Binding CanStepForward}" Name="ButtonNext" MinWidth="30" Margin="2" Content="&gt;" Click="ButtonNext_Click"></Button>
-                            <Button Name="ButtonStartPositon" Width="80" Margin="2" Content="Start Point" Click="ButtonStartPositon_Click"></Button>
+                            <Button IsEnabled="{Binding CanStepBack}" Name="ButtonPrevious" MinWidth="30" Margin="2"
+                                    Content="&lt;" Click="ButtonPrevious_Click" />
+                            <Button IsEnabled="{Binding CanStepForward}" Name="ButtonNext" MinWidth="30" Margin="2"
+                                    Content="&gt;" Click="ButtonNext_Click" />
+                            <Button Name="ButtonStartPositon" Width="80" Margin="2" Content="Start Point"
+                                    Click="ButtonStartPositon_Click" />
                         </StackPanel>
 
-                        <Label Margin="2" Content="Maximum Iterations"></Label>
-                        <Slider Name="SliderIterationen" Margin="2" Minimum="0" Maximum="10000" Value="{Binding CurrentFrame.MaxIterations}" Orientation="Horizontal" SmallChange="1" IsSnapToTickEnabled="True"></Slider>
-                        <TextBox Margin="2" Name="TextBoxIterationen" Text="{Binding CurrentFrame.MaxIterations}"></TextBox>
+                        <Label Margin="2" Content="Maximum Iterations" />
+                        <Slider Name="SliderIterationen" Margin="2" Minimum="0" Maximum="10000"
+                                Value="{Binding CurrentFrame.MaxIterations}" Orientation="Horizontal" SmallChange="1"
+                                IsSnapToTickEnabled="True" />
+                        <TextBox Margin="2" Name="TextBoxIterationen" Text="{Binding CurrentFrame.MaxIterations}" />
 
-                        <Button Margin="2" Name="ButtonBerechnen" Content="Recalculate" Click="ButtonBerechnen_Click"></Button>
+                        <Button Margin="2" Name="ButtonBerechnen" Content="Recalculate" Click="ButtonBerechnen_Click" />
                     </StackPanel>
                 </Expander>
-                
-                <Expander Width="200" Margin="8"  Header="Colors" Name="ExpanderFarbe">
+
+                <Expander Width="200" Margin="8" Header="Colors" Name="ExpanderFarbe">
                     <StackPanel Margin="5" Orientation="Vertical">
                         <ComboBox Name="ComboBoxColors" Margin="2" SelectedIndex="0"
                                   DataContext="{x:Static datastructures:ColorMappings.Items}"
                                   ItemsSource="{Binding Source={x:Static datastructures:ColorMappings.Items}, Mode=OneWay}"
-                                  SelectedItem="{Binding Source={StaticResource viewM}, Path=SelectedItem}" />
+                                  SelectedItem="{Binding Source={StaticResource ViewM}, Path=SelectedItem}" />
                         <!--<RadioButton Name="RadioButtonColorsProzent" Margin="2, 10, 0, 0" Content="prozentueller Farbverlauf"></RadioButton>
                         <RadioButton IsChecked="True" Name="RadioButtonColorsIterationen" Margin="2" Content="iterativer Farbverlauf"></RadioButton>-->
                     </StackPanel>
                 </Expander>
-                
-                <Expander Width="200" Margin="8"  Header="Position" Name="ExpanderPosition">
+
+                <Expander Width="200" Margin="8" Header="Position" Name="ExpanderPosition">
                     <StackPanel Margin="5" Orientation="Vertical" Name="PositionStackPanel">
-                        <Label Margin="2" Content="Real axis (X) minimum"></Label>
-                        <TextBox Name="TextBoxXmin" Margin="2" Text="{Binding CurrentPos.XMin}"></TextBox>
+                        <Label Margin="2" Content="Real axis (X) minimum" />
+                        <TextBox Name="TextBoxXmin" Margin="2" Text="{Binding CurrentPos.XMin}" />
 
-                        <Label Margin="2" Content="Real axis (X) maximum"></Label>
-                        <TextBox Name="TextBoxXmax" Margin="2" Text="{Binding CurrentPos.XMax}"></TextBox>
+                        <Label Margin="2" Content="Real axis (X) maximum" />
+                        <TextBox Name="TextBoxXmax" Margin="2" Text="{Binding CurrentPos.XMax}" />
 
-                        <Label Margin="2" Content="Imaginary axis (Y) minimum"></Label>
-                        <TextBox Name="TextBoxYmin" Margin="2" Text="{Binding CurrentPos.YMin}"></TextBox>
+                        <Label Margin="2" Content="Imaginary axis (Y) minimum" />
+                        <TextBox Name="TextBoxYmin" Margin="2" Text="{Binding CurrentPos.YMin}" />
 
-                        <Label Margin="2" Content="Imaginary axis (Y) maximum"></Label>
-                        <TextBox Name="TextBoxYmax" Margin="2" Text="{Binding CurrentPos.YMax}"></TextBox>
+                        <Label Margin="2" Content="Imaginary axis (Y) maximum" />
+                        <TextBox Name="TextBoxYmax" Margin="2" Text="{Binding CurrentPos.YMax}" />
                     </StackPanel>
                 </Expander>
 
-                <Expander Width="200" Margin="8"  Header="Save" Name="ExpanderSpeichern">
+                <Expander Width="200" Margin="8" Header="Save" Name="ExpanderSpeichern">
                     <StackPanel Margin="5" Orientation="Vertical">
-                        <Button IsEnabled="True" Name="ButtonSaveBild" Margin="2" Content="Save image" Click="ButtonSaveBild_Click"></Button>
+                        <Button IsEnabled="True" Name="ButtonSaveBild" Margin="2" Content="Save image"
+                                Click="ButtonSaveBild_Click" />
                     </StackPanel>
                 </Expander>
-                <Label HorizontalContentAlignment="Center" Margin="8, 8, 8, 2" Name="StatusLabel" Height="20" Width="200"></Label>
+                <Label HorizontalContentAlignment="Center" Margin="8, 8, 8, 2" Name="StatusLabel" Height="20"
+                       Width="200" />
                 <ProgressBar IsEnabled="False" Margin="8, 2, 8, 8" Height="20" Name="ProgressBarMandelBrot" Width="200" />
-                
+
             </WrapPanel>
         </ScrollViewer>
-        
+
     </Grid>
 </Window>

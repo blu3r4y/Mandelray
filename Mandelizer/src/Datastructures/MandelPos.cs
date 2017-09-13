@@ -45,9 +45,8 @@ namespace Mandelizer.Datastructures
             get
             {
                 double min = Math.Min(XDiff, YDiff);
-                return (int) (Math.Log(1/min)*40 + 100);
+                return (int) (Math.Log(1 / min) * 40 + 100);
             }
         }
-
     }
 }

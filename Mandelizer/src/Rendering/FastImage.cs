@@ -19,6 +19,7 @@ namespace Mandelizer.Rendering
 
         // some image characteristics
         private readonly int _width;
+
         private readonly int _height;
 
         private readonly WriteableBitmap _writeableBitmap;
@@ -31,7 +32,7 @@ namespace Mandelizer.Rendering
             // bind the source of the image to this map
             _writeableBitmap = BitmapFactory.New(width, height);
             _writeableBitmap.Clear(Colors.Transparent);
-            
+
             image.Source = _writeableBitmap;
         }
 
@@ -46,7 +47,7 @@ namespace Mandelizer.Rendering
         {
             unsafe
             {
-                ((int*)ptr)[y * _width + x] = color;
+                ((int*) ptr)[y * _width + x] = color;
             }
         }
 
@@ -54,10 +55,8 @@ namespace Mandelizer.Rendering
         {
             long ptr = 0;
 
-            Application.Current.Dispatcher.Invoke(() =>
-            {
-                ptr = (long)_writeableBitmap.BackBuffer;
-            }, DispatcherPriority.Render);
+            Application.Current.Dispatcher.Invoke(() => { ptr = (long) _writeableBitmap.BackBuffer; },
+                DispatcherPriority.Render);
 
             return ptr;
         }
@@ -104,7 +103,7 @@ namespace Mandelizer.Rendering
             Application.Current.Dispatcher.Invoke(() =>
             {
                 _writeableBitmap.Lock();
-                ptr = (long)_writeableBitmap.BackBuffer;
+                ptr = (long) _writeableBitmap.BackBuffer;
             }, DispatcherPriority.Render);
 
             return ptr;
@@ -129,4 +128,3 @@ namespace Mandelizer.Rendering
         }
     }
 }
-

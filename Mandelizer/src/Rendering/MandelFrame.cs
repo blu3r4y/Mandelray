@@ -23,7 +23,7 @@ namespace Mandelizer.Rendering
         /// stores position information about this specific frame
         /// </summary>
         public MandelPos Position { get; }
-        
+
         // buffered data
         private int[,] _iterationStore;
 
@@ -93,16 +93,20 @@ namespace Mandelizer.Rendering
             {
                 ResetToken();
 
-                using (var renderer = new Renderer(Position, _mainWindow.ColorMapRef, _mainWindow.FastImagePreviewRef, MaxIterations))
+                using (var renderer = new Renderer(Position, _mainWindow.ColorMapRef, _mainWindow.FastImagePreviewRef,
+                    MaxIterations))
                 {
                     //_mainWindow.FastImagePreviewRef.Clear();
-                    renderer.Render(_mainWindow.RenderSizeRef.PreviewWidth, _mainWindow.RenderSizeRef.PreviewHeight, CancelToken);
+                    renderer.Render(_mainWindow.RenderSizeRef.PreviewWidth, _mainWindow.RenderSizeRef.PreviewHeight,
+                        CancelToken);
                 }
 
-                using (var renderer = new Renderer(Position, _mainWindow.ColorMapRef, _mainWindow.FastImageRef, MaxIterations))
+                using (var renderer = new Renderer(Position, _mainWindow.ColorMapRef, _mainWindow.FastImageRef,
+                    MaxIterations))
                 {
                     _mainWindow.FastImageRef.Clear();
-                    renderer.Render(_mainWindow.RenderSizeRef.RenderWidth, _mainWindow.RenderSizeRef.RenderHeight, CancelToken);
+                    renderer.Render(_mainWindow.RenderSizeRef.RenderWidth, _mainWindow.RenderSizeRef.RenderHeight,
+                        CancelToken);
 
                     // store reference to the buffer
                     _iterationStore = renderer.Buffer;
@@ -121,7 +125,6 @@ namespace Mandelizer.Rendering
                 _iterationStore.GetLength(0) == _mainWindow.RenderSizeRef.RenderWidth &&
                 _iterationStore.GetLength(1) == _mainWindow.RenderSizeRef.RenderHeight)
             {
-
                 // abort ongoing rendering and try to catch the lock
                 CancelToken.Cancel();
                 lock (RenderLock)
@@ -131,7 +134,7 @@ namespace Mandelizer.Rendering
                     long ptr = _mainWindow.FastImageRef.Lock();
                     _mainWindow.FastImageRef.Clear();
 
-                    var options = new ParallelOptions { CancellationToken = CancelToken.Token };
+                    var options = new ParallelOptions {CancellationToken = CancelToken.Token};
 
                     try
                     {

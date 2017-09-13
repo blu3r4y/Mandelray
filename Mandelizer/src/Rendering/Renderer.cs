@@ -24,7 +24,7 @@ namespace Mandelizer.Rendering
         private readonly MandelPos _position;
 
         private readonly FastImage _fastImage;
-        
+
         private readonly ColorMappings.ColorMap _colorMap;
 
         private const double OneOverLogTwo = 1.4426950408889634;
@@ -37,7 +37,7 @@ namespace Mandelizer.Rendering
             _maxIterations = maxIterations;
             _pixelBufferPtr = fastImage.GetPointer();
         }
-        
+
         public void Render(int width, int height, CancellationTokenSource tokenSource)
         {
             var stopwatch = new Stopwatch();
@@ -60,7 +60,7 @@ namespace Mandelizer.Rendering
             int[] localColorMap = new int[colorMapLength];
             Array.Copy(_colorMap.Colors, localColorMap, colorMapLength);
 
-            var options = new ParallelOptions { CancellationToken = tokenSource.Token };
+            var options = new ParallelOptions {CancellationToken = tokenSource.Token};
 
             // start rendering from the center
             var midToTop = RangeMinMaxInclusive(0, GetIndex(height, 0.5, true)).Reverse();
@@ -68,7 +68,7 @@ namespace Mandelizer.Rendering
             var source = midToTop.Concat(midToBot).ToArray();
 
             // if (source.Distinct().Count() == source.Count()) throw new Exception("implementation error");
-            
+
             OrderablePartitioner<int> partitioner = Partitioner.Create(source, true);
 
             Stopwatch sw = Stopwatch.StartNew();
@@ -154,7 +154,6 @@ namespace Mandelizer.Rendering
             _fastImage.Dirty();
 
             Trace.WriteLine($"=> Calculation took {stopwatch.ElapsedMilliseconds} milliseconds.");
-            
         }
 
         private static int GetIndex(int value, double rate, bool lower)
