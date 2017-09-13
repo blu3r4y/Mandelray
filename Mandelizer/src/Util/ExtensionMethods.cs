@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mandelizer
+namespace Mandelizer.Util
 {
     public static class ExtensionMethods
     {

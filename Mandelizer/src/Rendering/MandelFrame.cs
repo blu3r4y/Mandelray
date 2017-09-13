@@ -3,9 +3,8 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Mandelizer.Datastructures;
-using Mandelizer.Rendering;
 
-namespace Mandelizer
+namespace Mandelizer.Rendering
 {
     /// <summary>
     /// represents a single frame with a fixed position within the mandelbrot set.

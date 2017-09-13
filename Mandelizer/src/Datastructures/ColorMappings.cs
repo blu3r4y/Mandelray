@@ -5,6 +5,7 @@ using System.Drawing;
 using System.Linq;
 using MathNet.Numerics;
 using MathNet.Numerics.Interpolation;
+using Mandelizer.Util;
 
 namespace Mandelizer.Datastructures
 {

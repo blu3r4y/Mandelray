@@ -6,7 +6,7 @@
         xmlns:mandelizer="clr-namespace:Mandelizer"
         xmlns:datastructures="clr-namespace:Mandelizer.Datastructures"
         mc:Ignorable="d"
-        Title="Mandelizer v3.0" Height="538" Width="766" Icon="icon.ico" ContentRendered="Window_ContentRendered" SizeChanged="Window_SizeChanged"
+        Title="Mandelizer v3.0" Height="538" Width="766" Icon="../img/icon.ico" ContentRendered="Window_ContentRendered" SizeChanged="Window_SizeChanged"
         d:DataContext="{d:DesignInstance mandelizer:MainWindow}">
     <Grid>
 

@@ -6,7 +6,7 @@ using System.Windows.Media;
 using System.Windows.Shapes;
 using Mandelizer.Datastructures;
 
-namespace Mandelizer
+namespace Mandelizer.Util
 {
     /// <summary>
     /// holds information about the zoomed position (left, top coordinate)

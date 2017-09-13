@@ -2,7 +2,7 @@
 using System.Windows;
 using System.Windows.Media.Imaging;
 
-namespace Mandelizer
+namespace Mandelizer.Util
 {
     public static class SaveHelper
     {
