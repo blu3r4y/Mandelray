@@ -6,6 +6,7 @@ using Mandelizer.Datastructures;
 using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using MoreLinq;
 
 namespace Mandelizer.Rendering
 {
@@ -62,16 +63,9 @@ namespace Mandelizer.Rendering
             var options = new ParallelOptions { CancellationToken = tokenSource.Token };
 
             // start rendering from the center
-            var source = new[]
-            {
-                // middle area
-                RangeMinMaxInclusive(GetIndex(height, 0.33, false), GetIndex(height, 0.66, true)),
-                // top (reversed)
-                RangeMinMaxInclusive(0, GetIndex(height, 0.33, true)).Reverse(),
-                // bottom
-                RangeMinMaxInclusive(GetIndex(height, 0.66, false), height - 1)
-            }
-            .SelectMany(x => x).ToArray();
+            var midToTop = RangeMinMaxInclusive(0, GetIndex(height, 0.5, true)).Reverse();
+            var midToBot = RangeMinMaxInclusive(GetIndex(height, 0.5, false), height - 1);
+            var source = midToTop.Concat(midToBot).ToArray();
 
             // if (source.Distinct().Count() == source.Count()) throw new Exception("implementation error");
             
