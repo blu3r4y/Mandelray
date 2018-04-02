@@ -19,6 +19,8 @@ The algorithm is based on the [escape time algorithm](https://en.wikipedia.org/w
 - Navigation history
 - Save the result as an image
 
+![Mandelray](mandelray.gif)
+
 ## Usage
 
 Click and drag with the left mouse button pressed to zoom within the Mandelbrot set.
