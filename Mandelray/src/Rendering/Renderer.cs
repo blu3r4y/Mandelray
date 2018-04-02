@@ -6,7 +6,6 @@ using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Mandelray.Datastructures;
-using MoreLinq;
 
 namespace Mandelray.Rendering
 {
