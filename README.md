@@ -2,7 +2,7 @@
 
 [![Latest Release](https://img.shields.io/github/release/blu3r4y/Mandelray.svg)](https://github.com/blu3r4y/Mandelray/releases/latest)
 [![Build Status](https://ci.appveyor.com/api/projects/status/jn0lndv2ijrrbiyp?svg=true)](https://ci.appveyor.com/project/blu3r4y/mandelray)
-[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE.md)
 
 Mandelray calculates the [Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set) and allows to navigate and zoom in it.
 
@@ -21,17 +21,9 @@ The algorithm is based on the [escape time algorithm](https://en.wikipedia.org/w
 
 ![Mandelray](mandelray.gif)
 
-## Usage
-
-Click and drag with the left mouse button pressed to zoom within the Mandelbrot set.
-You can zoom even if a calculation is in progress (the current calculation will be cancelled).
-Use the arrow buttons in the upper right corner to navigate in your zoom history.
-You can always go back to the beginning with the Start Point button.
-You can change the active color scheme at any time.
-
 ## Requirements
 
-- [.NET Framework 4.5](https://docs.microsoft.com/en-us/dotnet/framework/install/on-windows-10) (on Windows)
+- [.NET Framework 4.5+](https://docs.microsoft.com/en-us/dotnet/framework/install/on-windows-10) (on Windows)
 
 ## Credits
 
