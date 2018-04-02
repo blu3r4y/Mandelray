@@ -7,10 +7,10 @@ namespace Mandelray.Util
     public static class SaveHelper
     {
         /// <summary>
-        /// saves an image to a file and returns the path
+        /// Saves an image to a file and returns the path
         /// </summary>
-        /// <param name="image">image control to save as image</param>
-        /// <returns>the selected path</returns>
+        /// <param name="image">Image to be saved</param>
+        /// <returns>Selected path</returns>
         public static string SaveImage(System.Windows.Controls.Image image)
         {
             var saveImageDialog = new Microsoft.Win32.SaveFileDialog

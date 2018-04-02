@@ -9,7 +9,7 @@ using Mandelray.Datastructures;
 namespace Mandelray.Util
 {
     /// <summary>
-    /// holds information about the zoomed position (left, top coordinate)
+    /// Holds information about the zoomed position (left, top coordinate)
     /// and its height and width
     /// </summary>
     public class ZoomSelectionEventArgs : EventArgs
@@ -32,40 +32,38 @@ namespace Mandelray.Util
     public delegate void ZoomSelectedEventHandler(object sender, ZoomSelectionEventArgs e);
 
     /// <summary>
-    /// handles the zooming and selection
+    /// Handles the zooming and selection
     /// </summary>
     public class ZoomSelectionHandler
     {
         /// <summary>
-        /// the canvas in which the zooming is possible
+        /// The canvas in which the zooming is possible
         /// </summary>
         public Canvas ReferenceCanvas;
 
         /// <summary>
-        /// the displayed zooming rectangle
+        /// The displayed zooming rectangle
         /// </summary>
         public Rectangle ZoomingRectangle { get; }
 
         /// <summary>
-        /// will be calcuted if the zooming has been selected
+        /// Will be calcuted if the zooming has been selected
         /// </summary>
         public event ZoomSelectedEventHandler ZoomSelected;
 
-        // zooming enabled
         private bool _isZooming;
 
-        // rectangle points
         private Point _rectStart;
 
         private Point _rectEnd;
 
         /// <summary>
-        /// default aspect ratio
+        /// Default aspect ratio
         /// </summary>
         public static readonly double GausRatioXy;
 
         /// <summary>
-        /// default aspect ratio
+        /// Default aspect ratio
         /// </summary>
         public static readonly double GausRatioYx;
 

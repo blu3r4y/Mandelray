@@ -3,12 +3,12 @@
 namespace Mandelray.Datastructures
 {
     /// <summary>
-    /// defines a spot within the mandelbrot set
+    /// Defines a spot within the mandelbrot set
     /// </summary>
     public class MandelPos
     {
         /// <summary>
-        /// initial start position of mandel
+        /// Initial start position of mandel
         /// </summary>
         public static readonly MandelPos DefaultPos;
 
@@ -36,9 +36,9 @@ namespace Mandelray.Datastructures
         }
 
         /// <summary>
-        /// recommended number of iterations for this area
-        /// of the mandelbrot set. the deeper you are zooming into
-        /// the mandelbrot set, the more iterations are needed.
+        /// Recommended number of iterations for this area
+        /// of the Mandelbrot set. The deeper you are zooming into
+        /// the Mandelbrot set, the more iterations are needed.
         /// </summary>
         public int RecommendedIterations
         {

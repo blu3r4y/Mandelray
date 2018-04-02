@@ -8,12 +8,12 @@ using Image = System.Windows.Controls.Image;
 namespace Mandelray.Rendering
 {
     /// <summary>
-    /// faster image implementation for low level set pixel performance
+    /// Faster image implementation for low level set pixel performance
     /// </summary>
     public class FastImage : IDisposable
     {
         /// <summary>
-        /// tells if this object is still usable and not disposed yet
+        /// Tells if this object is still usable and not disposed yet
         /// </summary>
         public bool Disposed { get; private set; }
 
@@ -37,11 +37,11 @@ namespace Mandelray.Rendering
         }
 
         /// <summary>
-        /// sets the pixel in the image directly and fast.
+        /// Sets the pixel in the image directly and fast.
         /// </summary>
         /// <param name="ptr">The pointer to the back buffer</param>
-        /// <param name="x">horizontal coordinate</param>
-        /// <param name="y">vertical coordinate</param>
+        /// <param name="x">Horizontal coordinate</param>
+        /// <param name="y">Vertical coordinate</param>
         /// <param name="color">32bit argb value of the pixel</param>
         public void SetPixel(long ptr, int x, int y, int color)
         {
@@ -119,8 +119,8 @@ namespace Mandelray.Rendering
         }
 
         /// <summary>
-        /// disposes all file and memory mappings.
-        /// makes the whole object unusable afterwards.
+        /// Disposes all file and memory mappings.
+        /// Makes the whole object unusable afterwards.
         /// </summary>
         public void Dispose()
         {

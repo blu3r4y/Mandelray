@@ -26,7 +26,7 @@ namespace Mandelray.Rendering
 
         private readonly ColorMappings.ColorMap _colorMap;
 
-        private const double OneOverLogTwo = 1.4426950408889634;
+        private const double ONE_OVER_LOG_TWO = 1.4426950408889634;
 
         public Renderer(MandelPos position, ColorMappings.ColorMap colorMap, FastImage fastImage, int maxIterations)
         {
@@ -66,15 +66,11 @@ namespace Mandelray.Rendering
             var midToBot = RangeMinMaxInclusive(GetIndex(height, 0.5, false), height - 1);
             var source = midToTop.Concat(midToBot).ToArray();
 
-            // if (source.Distinct().Count() == source.Count()) throw new Exception("implementation error");
-
             OrderablePartitioner<int> partitioner = Partitioner.Create(source, true);
-
-            Stopwatch sw = Stopwatch.StartNew();
 
             try
             {
-                ParallelLoopResult result = Parallel.ForEach(partitioner, options, () => 0, (y, state, threadLocal) =>
+                ParallelLoopResult unused = Parallel.ForEach(partitioner, options, () => 0, (y, state, threadLocal) =>
                     {
                         double zRe, zIm, zReSq, zImSq, zReTmp;
                         int iterations;
@@ -113,7 +109,7 @@ namespace Mandelray.Rendering
                             {
                                 // smooth coloring algorithm
                                 double zLog = Math.Log(zReSq + zImSq) / 2;
-                                var nu = (int) (Math.Log(zLog * OneOverLogTwo) * OneOverLogTwo);
+                                var nu = (int) (Math.Log(zLog * ONE_OVER_LOG_TWO) * ONE_OVER_LOG_TWO);
                                 iterations = iterations + 1 - nu;
 
                                 // directly write to pixel buffer
@@ -140,7 +136,7 @@ namespace Mandelray.Rendering
                     {
                         _fastImage.Dirty();
 
-                        Trace.WriteLine($"=> Dirty requested.");
+                        Trace.WriteLine("=> Dirty requested.");
                     });
             }
             catch (OperationCanceledException)

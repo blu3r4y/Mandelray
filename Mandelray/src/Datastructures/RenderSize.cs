@@ -1,7 +1,7 @@
 ﻿namespace Mandelray.Datastructures
 {
     /// <summary>
-    /// Defines the width and height of the rendered mandelbrot set viewport.
+    /// Defines the width and height of the rendered Mandelbrot set viewport.
     /// We distinguish between the actual render size and display size.
     /// </summary>
     public class RenderSize

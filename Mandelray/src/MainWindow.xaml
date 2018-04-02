@@ -35,65 +35,59 @@
         </Grid>
 
         <ScrollViewer Grid.Column="1">
-            <WrapPanel Name="WrapPanelControls">
+            <WrapPanel>
 
-                <Expander Width="200" Margin="8" Header="Calculation" IsExpanded="True" Name="ExpanderBerechnung">
+                <Expander Width="200" Margin="8" Header="Calculation" IsExpanded="True">
                     <StackPanel Margin="5" Orientation="Vertical">
                         <StackPanel Margin="0, 0, 0, 10" Orientation="Horizontal">
-                            <Button IsEnabled="{Binding CanStepBack}" Name="ButtonPrevious" MinWidth="30" Margin="2"
+                            <Button IsEnabled="{Binding CanStepBack}" MinWidth="30" Margin="2"
                                     Content="&lt;" Click="ButtonPrevious_Click" />
-                            <Button IsEnabled="{Binding CanStepForward}" Name="ButtonNext" MinWidth="30" Margin="2"
+                            <Button IsEnabled="{Binding CanStepForward}" MinWidth="30" Margin="2"
                                     Content="&gt;" Click="ButtonNext_Click" />
-                            <Button Name="ButtonStartPositon" Width="80" Margin="2" Content="Start Point"
+                            <Button Width="80" Margin="2" Content="Start Point"
                                     Click="ButtonStartPositon_Click" />
                         </StackPanel>
 
                         <Label Margin="2" Content="Maximum Iterations" />
-                        <Slider Name="SliderIterationen" Margin="2" Minimum="0" Maximum="10000"
+                        <Slider Margin="2" Minimum="0" Maximum="10000"
                                 Value="{Binding CurrentFrame.MaxIterations}" Orientation="Horizontal" SmallChange="1"
                                 IsSnapToTickEnabled="True" />
-                        <TextBox Margin="2" Name="TextBoxIterationen" Text="{Binding CurrentFrame.MaxIterations}" />
+                        <TextBox Margin="2" Text="{Binding CurrentFrame.MaxIterations}" />
 
-                        <Button Margin="2" Name="ButtonBerechnen" Content="Recalculate" Click="ButtonBerechnen_Click" />
+                        <Button Margin="2" Content="Recalculate" Click="ButtonBerechnen_Click" />
                     </StackPanel>
                 </Expander>
 
-                <Expander Width="200" Margin="8" Header="Colors" Name="ExpanderFarbe">
+                <Expander Width="200" Margin="8" Header="Colors">
                     <StackPanel Margin="5" Orientation="Vertical">
-                        <ComboBox Name="ComboBoxColors" Margin="2" SelectedIndex="0"
+                        <ComboBox Margin="2" SelectedIndex="0"
                                   DataContext="{x:Static datastructures:ColorMappings.Items}"
                                   ItemsSource="{Binding Source={x:Static datastructures:ColorMappings.Items}, Mode=OneWay}"
                                   SelectedItem="{Binding Source={StaticResource ViewM}, Path=SelectedItem}" />
-                        <!--<RadioButton Name="RadioButtonColorsProzent" Margin="2, 10, 0, 0" Content="prozentueller Farbverlauf"></RadioButton>
-                        <RadioButton IsChecked="True" Name="RadioButtonColorsIterationen" Margin="2" Content="iterativer Farbverlauf"></RadioButton>-->
                     </StackPanel>
                 </Expander>
 
-                <Expander Width="200" Margin="8" Header="Position" Name="ExpanderPosition">
+                <Expander Width="200" Margin="8" Header="Position">
                     <StackPanel Margin="5" Orientation="Vertical" Name="PositionStackPanel">
                         <Label Margin="2" Content="Real axis (X) minimum" />
-                        <TextBox Name="TextBoxXmin" Margin="2" Text="{Binding CurrentPos.XMin}" />
+                        <TextBox Margin="2" Text="{Binding CurrentPos.XMin}" />
 
                         <Label Margin="2" Content="Real axis (X) maximum" />
-                        <TextBox Name="TextBoxXmax" Margin="2" Text="{Binding CurrentPos.XMax}" />
+                        <TextBox Margin="2" Text="{Binding CurrentPos.XMax}" />
 
                         <Label Margin="2" Content="Imaginary axis (Y) minimum" />
-                        <TextBox Name="TextBoxYmin" Margin="2" Text="{Binding CurrentPos.YMin}" />
+                        <TextBox Margin="2" Text="{Binding CurrentPos.YMin}" />
 
                         <Label Margin="2" Content="Imaginary axis (Y) maximum" />
-                        <TextBox Name="TextBoxYmax" Margin="2" Text="{Binding CurrentPos.YMax}" />
+                        <TextBox Margin="2" Text="{Binding CurrentPos.YMax}" />
                     </StackPanel>
                 </Expander>
 
-                <Expander Width="200" Margin="8" Header="Save" Name="ExpanderSpeichern">
+                <Expander Width="200" Margin="8" Header="Save">
                     <StackPanel Margin="5" Orientation="Vertical">
-                        <Button IsEnabled="True" Name="ButtonSaveBild" Margin="2" Content="Save image"
-                                Click="ButtonSaveBild_Click" />
+                        <Button IsEnabled="True" Margin="2" Content="Save image" Click="ButtonSaveBild_Click" />
                     </StackPanel>
                 </Expander>
-                <Label HorizontalContentAlignment="Center" Margin="8, 8, 8, 2" Name="StatusLabel" Height="20"
-                       Width="200" />
-                <ProgressBar IsEnabled="False" Margin="8, 2, 8, 8" Height="20" Name="ProgressBarMandelBrot" Width="200" />
 
             </WrapPanel>
         </ScrollViewer>

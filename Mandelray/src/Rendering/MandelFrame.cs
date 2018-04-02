@@ -7,28 +7,30 @@ using Mandelray.Datastructures;
 namespace Mandelray.Rendering
 {
     /// <summary>
-    /// represents a single frame with a fixed position within the mandelbrot set.
+    /// Represents a single frame with a fixed position within the mandelbrot set.
     /// </summary>
     public sealed class MandelFrame
     {
         public static CancellationTokenSource CancelToken = new CancellationTokenSource();
 
         /// <summary>
-        /// used for synchronization. only one object can have the rendering permission
-        /// at any time.
+        /// Used for synchronization.
+        /// Only one object can have the rendering permission at any time.
         /// </summary>
         public static readonly object RenderLock = new object();
 
         /// <summary>
-        /// stores position information about this specific frame
+        /// Stores position information about this specific frame
         /// </summary>
         public MandelPos Position { get; }
 
-        // buffered data
+        /// <summary>
+        /// Buffered data
+        /// </summary>
         private int[,] _iterationStore;
 
         /// <summary>
-        /// maximum iterations which are used on this frame
+        /// Maximum iterations which are used on this frame
         /// </summary>
         public int MaxIterations
         {
@@ -51,12 +53,11 @@ namespace Mandelray.Rendering
         private readonly MainWindow _mainWindow;
 
         /// <summary>
-        /// represents a single frame with a fixed position
-        /// within the mandelbrot set. can store the information about
-        /// the iterations per pixel, as long as the rendered size doesn't change.
+        /// Represents a single frame with a fixed position within the Mandelbrot set.
+        /// Can store the information about the iterations per pixel, as long as the rendered size doesn't change.
         /// </summary>
-        /// <param name="mainWindowInstance">reference to the calling main window, in order to use the proper image</param>
-        /// <param name="position">position of the mandelbrot set to observe</param>
+        /// <param name="mainWindowInstance">Reference to the calling main window, in order to use the proper image</param>
+        /// <param name="position">Position of the Mandelbrot set to observe</param>
         public MandelFrame(MainWindow mainWindowInstance, MandelPos position)
         {
             Position = position;
@@ -83,7 +84,7 @@ namespace Mandelray.Rendering
         }
 
         /// <summary>
-        /// renders the mandelbrot and draws it on default.
+        /// Renders the mandelbrot and draws it on default.
         /// </summary>
         private void Render()
         {
@@ -115,8 +116,8 @@ namespace Mandelray.Rendering
         }
 
         /// <summary>
-        /// just draws the frame, which is currently saved to the buffer.
-        /// if the rendered size differs from the saved on the frame needs to be re-renderd.
+        /// Just draws the frame, which is currently saved to the buffer.
+        /// If the rendered size differs from the saved on the frame needs to be re-renderd.
         /// </summary>
         private void Draw()
         {

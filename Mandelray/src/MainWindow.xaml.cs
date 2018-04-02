@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Windows;
@@ -19,52 +18,52 @@ namespace Mandelray
         public event PropertyChangedEventHandler PropertyChanged;
 
         /// <summary>
-        /// stores the object, which holds a handle to render the wpf image faster
+        /// Stores the object, which holds a handle to render the wpf image faster
         /// </summary>
         public FastImage FastImageRef { get; private set; }
 
         /// <summary>
-        /// stores the object, which holds a handle to render the wpf image faster
+        /// Stores the object, which holds a handle to render the wpf image faster
         /// </summary>
         public FastImage FastImagePreviewRef { get; private set; }
 
         /// <summary>
-        /// the used coler map for all frames in argb32 encoding
+        /// The used coler map for all frames in argb32 encoding
         /// </summary>
         public ColorMappings.ColorMap ColorMapRef => ColorMappings.SelectedItem;
 
         /// <summary>
-        /// keeps the current render size information
+        /// Keeps the current render size information
         /// </summary>
         public readonly RenderSize RenderSizeRef;
 
         /// <summary>
-        /// holds all the frames which got calculated already
+        /// Holds all the frames which got calculated already
         /// </summary>
         public List<MandelFrame> FrameBuffer = new List<MandelFrame>();
 
         /// <summary>
-        /// holds the current index within the frame buffer
+        /// Holds the current index within the frame buffer
         /// </summary>
         public int FrameBufferIndex { get; private set; }
 
         /// <summary>
-        /// can take a step back in the queue of mandelbrot sets
+        /// Can take a step back in the queue of mandelbrot sets
         /// </summary>
         public bool CanStepBack => HasFrames && FrameBufferIndex > 0;
 
         /// <summary>
-        /// can take a step forward in the queue of mandelbrot sets
+        /// Can take a step forward in the queue of mandelbrot sets
         /// </summary>
         public bool CanStepForward => HasFrames && FrameBufferIndex < FrameBuffer.Count - 1;
 
         /// <summary>
-        /// current active frame
+        /// Current active frame
         /// </summary>
         public MandelFrame CurrentFrame => HasFrames ? FrameBuffer[FrameBufferIndex] : null;
 
         /// <summary>
-        /// current displayed position
+        /// Current displayed position
         /// </summary>
         public MandelPos CurrentPos => CurrentFrame != null ? CurrentFrame.Position : MandelPos.DefaultPos;
 
@@ -106,15 +105,14 @@ namespace Mandelray
         }
 
         /// <summary>
-        /// refreshes the final pixel render size which will be used
-        /// by all the rendering methods
+        /// Refreshes the final pixel render size which will be used by all the rendering methods
         /// </summary>
-        /// <param name="invalidateFastImage">creates a new FastImage and disposes the old one</param>
+        /// <param name="invalidateFastImage">Creates a new FastImage and disposes the old one</param>
         private void RefreshRenderSize(bool invalidateFastImage = false)
         {
             if (!IsLoaded) return;
 
-            Thread refreshThread = new Thread(() =>
+            var refreshThread = new Thread(() =>
             {
                 // suppress rendering actions while the windows is changed
                 MandelFrame.CancelToken.Cancel();
@@ -202,10 +200,10 @@ namespace Mandelray
 
 
         /// <summary>
-        /// submits a frame to the list, renders and displays it.
-        /// takes care of correct databinding updates.
+        /// Submits a frame to the list, renders and displays it.
+        /// Takes care of correct databinding updates.
         /// </summary>
-        /// <param name="frame">the frame to display</param>
+        /// <param name="frame">The frame to display</param>
         private void SubmitFrame(MandelFrame frame)
         {
             // calculate new index
@@ -219,12 +217,10 @@ namespace Mandelray
 
 
         /// <summary>
-        /// rerenders the current frame.
-        /// takes care of correct databinding updates.
+        /// Rerenders the current frame.
+        /// Takes care of correct databinding updates.
         /// </summary>
-        /// <param name="rerender">renders the current frame again</param>
-        [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument")]
-        private void RedrawCurrentFrame(bool rerender = false)
+        private void RedrawCurrentFrame()
         {
             // render
             CurrentFrame?.DrawAsync();
