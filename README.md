@@ -1,5 +1,9 @@
 # Mandelray: A Mandelbrot Set Viewer in C#
 
+[![Latest Release](https://img.shields.io/github/release/blu3r4y/Mandelray.svg)](https://github.com/blu3r4y/Mandelray/releases/latest)
+[![Build Status](https://ci.appveyor.com/api/projects/status/jn0lndv2ijrrbiyp?svg=true)](https://ci.appveyor.com/project/blu3r4y/mandelray)
+[![MIT License](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+
 Mandelray calculates the [Mandelbrot set](https://en.wikipedia.org/wiki/Mandelbrot_set) and allows to navigate and zoom in it.
 
 Calculations are performed in C# and WPF is used to display the user interface.
