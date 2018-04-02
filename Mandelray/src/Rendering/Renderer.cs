@@ -2,13 +2,13 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Mandelizer.Datastructures;
 using System.Linq;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
+using Mandelray.Datastructures;
 using MoreLinq;
 
-namespace Mandelizer.Rendering
+namespace Mandelray.Rendering
 {
     public class Renderer : IDisposable
     {

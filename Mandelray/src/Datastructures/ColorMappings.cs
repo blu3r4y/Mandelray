@@ -5,9 +5,9 @@ using System.Drawing;
 using System.Linq;
 using MathNet.Numerics;
 using MathNet.Numerics.Interpolation;
-using Mandelizer.Util;
+using Mandelray.Util;
 
-namespace Mandelizer.Datastructures
+namespace Mandelray.Datastructures
 {
     /// <summary>
     /// Supplies some color mapping arrays

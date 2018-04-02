@@ -8,11 +8,11 @@ using System.Threading;
 using System.Windows;
 using System.Windows.Input;
 using System.Windows.Threading;
-using Mandelizer.Datastructures;
-using Mandelizer.Util;
-using Mandelizer.Rendering;
+using Mandelray.Datastructures;
+using Mandelray.Rendering;
+using Mandelray.Util;
 
-namespace Mandelizer
+namespace Mandelray
 {
     public sealed partial class MainWindow : INotifyPropertyChanged
     {

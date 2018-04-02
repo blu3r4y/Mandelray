@@ -1,14 +1,14 @@
-﻿<Window x:Class="Mandelizer.MainWindow"
+﻿<Window x:Class="Mandelray.MainWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:mandelizer="clr-namespace:Mandelizer"
-        xmlns:datastructures="clr-namespace:Mandelizer.Datastructures"
+        xmlns:mandelray="clr-namespace:Mandelray"
+        xmlns:datastructures="clr-namespace:Mandelray.Datastructures"
         mc:Ignorable="d"
-        Title="Mandelizer v3.0" Height="538" Width="766" Icon="../img/icon.ico"
+        Title="Mandelray" Height="538" Width="766" Icon="../img/icon.ico"
         ContentRendered="Window_ContentRendered" SizeChanged="Window_SizeChanged"
-        d:DataContext="{d:DesignInstance mandelizer:MainWindow}">
+        d:DataContext="{d:DesignInstance mandelray:MainWindow}">
     <Grid>
 
         <Grid.Resources>

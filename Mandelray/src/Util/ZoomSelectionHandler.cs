@@ -4,9 +4,9 @@ using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Shapes;
-using Mandelizer.Datastructures;
+using Mandelray.Datastructures;
 
-namespace Mandelizer.Util
+namespace Mandelray.Util
 {
     /// <summary>
     /// holds information about the zoomed position (left, top coordinate)

@@ -1,4 +1,4 @@
-﻿namespace Mandelizer.Datastructures
+﻿namespace Mandelray.Datastructures
 {
     /// <summary>
     /// Defines the width and height of the rendered mandelbrot set viewport.

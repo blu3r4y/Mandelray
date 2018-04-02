@@ -1,12 +1,12 @@
 ﻿using System.Reflection;
 using System.Runtime.InteropServices;
 
-[assembly: AssemblyTitle("Mandelizer")]
-[assembly: AssemblyDescription("WPF Application for calculating the Mandelbrot Set")]
+[assembly: AssemblyTitle("Mandelray")]
+[assembly: AssemblyDescription("A Mandelbrot Set Viewer in C#")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("Mario Kahlhofer")]
-[assembly: AssemblyProduct("Mandelizer")]
-[assembly: AssemblyCopyright("Copyright ©  2017")]
+[assembly: AssemblyProduct("Mandelray")]
+[assembly: AssemblyCopyright("Copyright ©  2018")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 [assembly: ComVisible(false)]

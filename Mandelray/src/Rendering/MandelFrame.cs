@@ -2,9 +2,9 @@
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-using Mandelizer.Datastructures;
+using Mandelray.Datastructures;
 
-namespace Mandelizer.Rendering
+namespace Mandelray.Rendering
 {
     /// <summary>
     /// represents a single frame with a fixed position within the mandelbrot set.

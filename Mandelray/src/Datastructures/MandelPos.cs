@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Mandelizer.Datastructures
+namespace Mandelray.Datastructures
 {
     /// <summary>
     /// defines a spot within the mandelbrot set

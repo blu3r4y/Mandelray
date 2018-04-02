@@ -5,7 +5,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Threading;
 using Image = System.Windows.Controls.Image;
 
-namespace Mandelizer.Rendering
+namespace Mandelray.Rendering
 {
     /// <summary>
     /// faster image implementation for low level set pixel performance
