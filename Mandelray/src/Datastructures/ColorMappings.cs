@@ -1,8 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Drawing;
 using System.Linq;
+using Colorspace;
 using MathNet.Numerics;
 using MathNet.Numerics.Interpolation;
 using Mandelray.Util;
@@ -53,7 +53,7 @@ namespace Mandelray.Datastructures
         }
 
         /// <summary>
-        /// holds the currently selected color mapping
+        /// Holds the currently selected color mapping
         /// </summary>
         public static ColorMap SelectedItem
         {
@@ -68,12 +68,12 @@ namespace Mandelray.Datastructures
         private static ColorMap _selectedItem;
 
         /// <summary>
-        /// holds all the available color mappings
+        /// Holds all the available color mappings
         /// </summary>
         public static ObservableCollection<ColorMap> Items { get; }
 
         /// <summary>
-        /// will be fired if the selcted item changed
+        /// Will be fired if the selcted item changed
         /// </summary>
         public static event SelectedItemChangedEventHandler ItemChanged;
 
@@ -83,7 +83,7 @@ namespace Mandelray.Datastructures
 
         static ColorMappings()
         {
-            /* ultra fractal */
+            /* ultra fractal (https://stackoverflow.com/a/25816111/927377) */
 
             const int ultraFractalSize = 128;
             UltraFractal = new Color[ultraFractalSize];
@@ -134,17 +134,17 @@ namespace Mandelray.Datastructures
                 GrayScale[i] = Color.FromArgb(255 - i, 255 - i, 255 - i);
             }
 
-            /* multi color 1 */
+            /* multi color */
 
             MultiColor = new Color[256];
-            MultiColor[0] = Color.FromArgb(255, 255, 255); // white
-            MultiColor[31] = Color.FromArgb(255, 255, 0); // yellow
-            MultiColor[63] = Color.FromArgb(0, 255, 0); // green
-            MultiColor[95] = Color.FromArgb(0, 255, 255); // light blue
-            MultiColor[127] = Color.FromArgb(0, 0, 255); // blue
-            MultiColor[159] = Color.FromArgb(255, 0, 255); // violet
-            MultiColor[191] = Color.FromArgb(255, 0, 0); // red
-            MultiColor[225] = Color.FromArgb(0, 0, 0); // black
+            MultiColor[0] = Color.FromArgb(255, 255, 255);  // white
+            MultiColor[31] = Color.FromArgb(255, 255, 0);   // yellow
+            MultiColor[63] = Color.FromArgb(0, 255, 0);     // green
+            MultiColor[95] = Color.FromArgb(0, 255, 255);   // light blue
+            MultiColor[127] = Color.FromArgb(0, 0, 255);    // blue
+            MultiColor[159] = Color.FromArgb(255, 0, 255);  // violet
+            MultiColor[191] = Color.FromArgb(255, 0, 0);    // red
+            MultiColor[225] = Color.FromArgb(0, 0, 0);      // black
 
             for (var i = 1; i <= 30; i++)
             {
@@ -175,46 +175,18 @@ namespace Mandelray.Datastructures
 
         private static double[] ColorToHsv(Color color)
         {
-            var hsv = new double[3]; // hue, saturation, value
+            var rgb = new ColorRGB(new ColorRGB32Bit(color.R, color.G, color.B));
+            var hsv = new ColorHSV(rgb);
 
-            int max = Math.Max(color.R, Math.Max(color.G, color.B));
-            int min = Math.Min(color.R, Math.Min(color.G, color.B));
-
-            hsv[0] = color.GetHue();
-            hsv[1] = max == 0 ? 0 : 1.0 - 1.0 * min / max;
-            hsv[2] = max / 255.0;
-
-            return hsv;
+            return new [] {hsv.H, hsv.S, hsv.V};
         }
 
         private static Color ColorFromHsv(double hue, double saturation, double value)
         {
-            int hi = Convert.ToInt32(Math.Floor(hue / 60)) % 6;
-            double f = hue / 60 - Math.Floor(hue / 60);
+            var hsv = new ColorHSV(hue, saturation, value);
+            var rgb = new ColorRGB32Bit(new ColorRGB(hsv));
 
-            value = value * 255;
-            int v = Convert.ToInt32(value);
-            int p = Convert.ToInt32(value * (1 - saturation));
-            int q = Convert.ToInt32(value * (1 - f * saturation));
-            int t = Convert.ToInt32(value * (1 - (1 - f) * saturation));
-
-            switch (hi)
-            {
-                case 0:
-                    return Color.FromArgb(255, v, t, p);
-                case 1:
-                    return Color.FromArgb(255, q, v, p);
-                case 2:
-                    return Color.FromArgb(255, p, v, t);
-                case 3:
-                    return Color.FromArgb(255, p, q, v);
-                case 4:
-                    return Color.FromArgb(255, t, p, v);
-                case 5:
-                    return Color.FromArgb(255, v, p, q);
-            }
-
-            throw new NotImplementedException();
+            return Color.FromArgb(rgb.R, rgb.G, rgb.B);
         }
     }
 }
