@@ -122,15 +122,14 @@ namespace Mandelray.Util
                 var newWidth = (int) (_rectEnd.X - _rectStart.X);
                 var newHeight = (int) (_rectEnd.Y - _rectStart.Y);
 
-                // fix ratio
-                if (Math.Abs(newWidth) > Math.Abs(newHeight)) newWidth = (int) (newHeight * GausRatioYx);
-                if (Math.Abs(newHeight) > Math.Abs(newWidth)) newHeight = (int) (newWidth * GausRatioXy);
-
-                // only quadratic zooming in 4th quadrant allowed
+                // show rectangle only in 4th quadrant
                 if (newWidth > 0 && newHeight > 0)
                 {
-                    ZoomingRectangle.Width = newWidth;
-                    ZoomingRectangle.Height = newHeight;
+                    (ZoomingRectangle.Width, ZoomingRectangle.Height) = FixRatio(newWidth, newHeight);
+                }
+                else
+                {
+                    (ZoomingRectangle.Width, ZoomingRectangle.Height) = (0, 0);
                 }
             }
         }
@@ -141,16 +140,23 @@ namespace Mandelray.Util
             if (_isZooming)
             {
                 // remember positions
-                var startX = (int) ZoomingRectangle.Margin.Left;
-                var startY = (int) ZoomingRectangle.Margin.Top;
-                var width = (int) ZoomingRectangle.Width;
-                var height = (int) ZoomingRectangle.Height;
+                var startX = (int) _rectStart.X;
+                var startY = (int) _rectStart.Y;
+                var width = (int) (_rectEnd.X - _rectStart.X);
+                var height = (int) (_rectEnd.Y - _rectStart.Y);
 
-                // disable zooming and hide rectangle
-                AbortSelection();
+                // only quadratic zooming in 4th quadrant allowed
+                if (width > 0 && height > 0)
+                {
+                    // fix ratio
+                    (width, height) = FixRatio(width, height);
 
-                // invoke event handler
-                ZoomSelected?.Invoke(this, new ZoomSelectionEventArgs(startX, startY, width, height));
+                    // disable zooming and hide rectangle
+                    AbortSelection();
+
+                    // invoke event handler
+                    ZoomSelected?.Invoke(this, new ZoomSelectionEventArgs(startX, startY, width, height));
+                }
             }
         }
 
@@ -162,6 +168,14 @@ namespace Mandelray.Util
             // hide rectangle
             ZoomingRectangle.Width = 0;
             ZoomingRectangle.Height = 0;
+        }
+
+        private static (int width, int height) FixRatio(int width, int height)
+        {
+            if (Math.Abs(width) > Math.Abs(height)) width = (int)(height * GausRatioYx);
+            if (Math.Abs(height) > Math.Abs(width)) height = (int)(width * GausRatioXy);
+
+            return (width, height);
         }
     }
 }
